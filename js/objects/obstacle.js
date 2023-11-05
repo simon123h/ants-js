@@ -5,7 +5,7 @@ Obstacle = function(x, y, width, height){
 	
 	this.x = x || window.innerWidth*Math.random();	//x-Position [int]
 	this.y = y || window.innerHeight*Math.random();	//y-Position [int]
-	this.image.src="../res/obstacle.png";
+	this.image.src="res/obstacle.png";
 	this.image.width = width || 90;
 	this.image.height = height || 500;
 	this.detectable = true;

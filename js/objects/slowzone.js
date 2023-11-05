@@ -5,7 +5,7 @@ Slowzone = function(x, y, width, height){
 	
 	this.x = x || window.innerWidth*Math.random();	//x-Position [int]
 	this.y = y || window.innerHeight*Math.random();	//y-Position [int]
-	this.image.src="../res/slowzone.png";
+	this.image.src="res/slowzone.png";
 	this.image.width = width || 150;
 	this.image.height = height || 150;
 	this.detectable = true;

@@ -23,7 +23,7 @@ Ant = function(x, y, color, probeLength){
 	this.health = 100;								//Gesundheit der Ameise (0-100) [int]
 	this.antType = null;							//Art der Ameise (Arbeiter...) [Object] [Implementieren]
 	this.probeLength = probeLength || 24;			//Laenge der Fuehler
-	this.image.src = "../res/ant.png";				//Bildquelle zum Zeichnen [string]
+	this.image.src = "res/ant.png";				//Bildquelle zum Zeichnen [string]
 	this.nest = undefined;							//Ameisenbau [Nest]
 	this.id = AntCounter++;
 	this.image.width = 15;
@@ -156,7 +156,7 @@ Ant = function(x, y, color, probeLength){
 	
 	//Zucker aufnehmen
 	this.takeSugar = function(obj){
-		this.image.src = "../res/antWithSugar.png";
+		this.image.src = "res/antWithSugar.png";
 		this.direction += Math.PI;
 		this.idle = false;
 		this.cargo = "sugar";
@@ -171,7 +171,7 @@ Ant = function(x, y, color, probeLength){
 	//Zucker ablegen
 	this.deploySugar = function(){
 		if(this.cargo != "sugar") return;
-		this.image.src = "../res/ant.png";
+		this.image.src = "res/ant.png";
 		this.idle = true;
 		this.direction += Math.PI;
 		this.cargo = null;

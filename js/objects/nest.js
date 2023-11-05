@@ -7,7 +7,7 @@ Nest = function(x, y){
 
 	this.x = x || window.innerWidth*Math.random();	//x-Position [int]
 	this.y = y || window.innerHeight*Math.random();	//y-Position [int]
-	this.image.src="../res/nest.png";
+	this.image.src="res/nest.png";
 	this.image.width = 120;
 	this.image.height = 120;
 	this.aromaStrength = 10;
