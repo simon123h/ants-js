@@ -5,6 +5,7 @@ class AntGame {
     // array of scents in the game
     this.scents = {
       "sugar": new Scent(15, "rgb(0, 0, 255)", 37),
+      "ant": new Scent(15, "rgb(255, 0, 0)", 80),
       "nest": new Scent(15, "rgb(220, 220, 0)", 30),
     };
 
