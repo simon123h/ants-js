@@ -164,7 +164,7 @@ Ant = function (x, y, color, probeLength) {
 		if (obj.amount < 1) {
 			obj.die();
 			new Sugar();
-			evolveAnts(20);
+			// evolveAnts(20);
 		}
 	}
 
