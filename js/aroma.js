@@ -92,4 +92,23 @@ class Aroma {
     }
   };
 
+  // visualize the aroma
+  draw(context) {
+    for (var i = 0; i < this.memory.length; i++) {
+      for (var j = 0; j < this.memory[i].length; j++) {
+        var val = this.memory[i][j] / this.max;
+        if (val > 1) val = 1;
+        context.fillStyle = this.color;
+        context.globalAlpha = val * 0.5;
+        context.fillRect(
+          i * this.resolution,
+          j * this.resolution,
+          this.resolution,
+          this.resolution,
+        );
+        context.globalAlpha = 1;
+      }
+    }
+  }
+
 };

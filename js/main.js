@@ -21,18 +21,11 @@ window.onload = function () {
   // new Obstacle(window.innerWidth/2-25, window.innerHeight+25, window.innerWidth+60, 50);
 };
 
-// add new scent by clicking
-document.onclick = function (e) {
-  var x = e.pageX;
-  var y = e.pageY;
-  game.aromas.ant.push(x, y, 100);
-};
-
 // start the game and visualization loops
 function start_game() {
-  game_intvl = setInterval(function () { game.step(); }, 20);
-  canvasIntvl = setInterval(redraw, 20);
-  overlayIntvl = setInterval(overlay, 90);
+  setInterval(function () { game.step(); }, 20);
+  setInterval(redraw, 20);
+  setInterval(overlay, 100);
 }
 
 // draw all objects in the game
@@ -54,37 +47,19 @@ function overlay() {
   canvas.width = window.innerWidth;
   context.clearRect(0, 0, canvas.width, canvas.height);
   for (var a in game.aromas) {
-    var aroma = game.aromas[a];
-    // TODO: make this a method of the aromas
-    var mem = aroma.memory;
-    for (var i = 0; i < mem.length; i++) {
-      for (var j = 0; j < mem[i].length; j++) {
-        var val = mem[i][j] / aroma.max;
-        if (val > 1) val = 1;
-        context.fillStyle = aroma.color;
-        context.globalAlpha = val;
-        context.fillRect(
-          i * aroma.resolution,
-          j * aroma.resolution,
-          aroma.resolution,
-          aroma.resolution,
-        );
-        context.globalAlpha = 1;
-      }
-    }
+    game.aromas[a].draw(context);
   }
 
-  /*
-  var mem = game.objMap.memory;
-  for(var i=0; i<mem.length; i++){
-    if(typeof(mem[i])!="undefined")
-    for(var j=0; j<mem[i].length; j++){
-      if(typeof(mem[i][j])!="undefined") context.fillStyle = "#F00";
-      else context.fillStyle = "#FFF";
-      context.fillRect(i*game.objMap.resolution, j*game.objMap.resolution, game.objMap.resolution, game.objMap.resolution);
-    }
-  }
-  */
+  // draw the ObjectMap
+  // var mem = game.objMap.memory;
+  // for (var i = 0; i < mem.length; i++) {
+  //   if (typeof (mem[i]) != "undefined")
+  //     for (var j = 0; j < mem[i].length; j++) {
+  //       if (typeof (mem[i][j]) != "undefined") context.fillStyle = "#F00";
+  //       else context.fillStyle = "#FFF";
+  //       context.fillRect(i * game.objMap.resolution, j * game.objMap.resolution, game.objMap.resolution, game.objMap.resolution);
+  //     }
+  // }
 }
 
 // auxiliary function to draw rotated images
@@ -102,7 +77,10 @@ function drawRotated(context, image, x, y, angle) {
   context.restore();
 }
 
-// auxiliary functions for debugging
-function newAnts(n) {
-  for (var i = 0; i < n; i++) new Ant();
-}
+// add new scent by clicking
+document.onclick = function (e) {
+  var x = e.pageX;
+  var y = e.pageY;
+  game.aromas.ant.push(x, y, 100);
+};
+
