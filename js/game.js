@@ -2,9 +2,7 @@ class AntGame {
   constructor() {
     this.time = 0;
     this.time_scale = 0.2;
-    // array of ants in the game
-    this.ants = [];
-    // array of objects in the game
+    // array of objects in the game (including ants)
     this.objects = [];
     // array of aromas in the game
     this.aromas = {
@@ -19,8 +17,8 @@ class AntGame {
     this.objMap = new ObjectMap();
   }
 
+  // do a step for every object in the game
   step() {
-    for (var ant of this.ants) ant.step();
     for (var obj of this.objects) obj.step();
     for (var a in this.aromas) this.aromas[a].step()
   }
@@ -28,9 +26,6 @@ class AntGame {
   // add an object to the game
   add_object(obj) {
     this.objects.push(obj);
-  }
-  add_ant(ant) {
-    this.ants.push(ant);
   }
 
   // remove an object from the game

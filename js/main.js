@@ -6,20 +6,19 @@ window.onload = function () {
   game = new AntGame();
   start_game();
   // generate objects in the game
-  for (var i = 0; i < 1; i++) game.add_object(new Nest(280, 280));
+  var nest = new Nest();
+  game.add_object(nest);
   for (var i = 0; i < 2; i++) game.add_object(new Obstacle());
   for (var i = 0; i < 1; i++) game.add_object(new Slowzone());
   for (var i = 0; i < 0; i++) game.add_object(new Portal());
   for (var i = 0; i < 3; i++) game.add_object(new Sugar());
-  for (var i = 0; i < 80; i++) game.add_ant(new Ant(250, 250, undefined, 24));
+  for (var i = 0; i < 80; i++) game.add_object(new Ant(nest.x, nest.y, 24));
 
   // Grenzen
-  /*
-  new Obstacle(-25, window.innerHeight/2-25, 50, window.innerHeight+50);
-  new Obstacle(window.innerWidth+25, window.innerHeight/2-25, 50, window.innerHeight+50);
-  new Obstacle(window.innerWidth/2-25, -25, window.innerWidth+50, 50);
-  new Obstacle(window.innerWidth/2-25, window.innerHeight+25, window.innerWidth+60, 50);
-  */
+  // new Obstacle(-25, window.innerHeight/2-25, 50, window.innerHeight+50);
+  // new Obstacle(window.innerWidth+25, window.innerHeight/2-25, 50, window.innerHeight+50);
+  // new Obstacle(window.innerWidth/2-25, -25, window.innerWidth+50, 50);
+  // new Obstacle(window.innerWidth/2-25, window.innerHeight+25, window.innerWidth+60, 50);
 };
 
 // add new scent by clicking
@@ -45,8 +44,6 @@ function redraw() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   for (var obj of game.objects)
     drawRotated(context, obj.image, obj.x, obj.y, obj.direction);
-  for (var ant of game.ants)
-    drawRotated(context, ant.image, ant.x, ant.y, ant.direction);
 }
 
 // draw the scent overlay

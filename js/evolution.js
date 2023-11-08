@@ -6,7 +6,7 @@ function dieLowScoreAnt() {
     if (ants[i].score < min) curAnt = ants[i];
   }
   var prev = curAnt.probeLength;
-  game.remove_ant(curAnt);
+  game.remove_object(curAnt);
   return Math.round(prev);
 }
 
@@ -20,7 +20,7 @@ function reproduceTopScoreAnt() {
   new Ant(250, 250, undefined, curAnt.probeLength);
   new Ant(250, 250, undefined, curAnt.probeLength + variation);
   var prev = curAnt.probeLength;
-  game.remove_ant(curAnt);
+  game.remove_object(curAnt);
   return Math.round(prev);
 }
 
