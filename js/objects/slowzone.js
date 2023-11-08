@@ -6,15 +6,14 @@ class Slowzone extends Obj {
     this.image.src = "res/slowzone.png";
     this.image.width = width || 150;
     this.image.height = height || 150;
-    game.objMap.pushArea(this.x, this.y, this.image.width, this.image.height, this);
   }
 
-  detect(by) {
-    if (by.speed == 3) {
+  detect(ant) {
+    if (ant.speed == 3) {
       setTimeout(function () {
-        by.speed = 3;
-      }, 2000 * game.time_scale);
-      by.speed = 1;
+        ant.speed = 3;
+      }, 400);
+      ant.speed = 1;
     }
   };
 };

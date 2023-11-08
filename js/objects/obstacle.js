@@ -8,31 +8,29 @@ class Obstacle extends Obj {
 		this.image.src = "res/obstacle.png";
 		this.image.width = width || 90;
 		this.image.height = height || 500;
-		// TODO: what does this do?
-		game.objMap.pushArea(this.x, this.y, this.image.width, this.image.height, this);
 	}
 
-	detect(by) {
-		if (!by.colliding) {
-			by.direction += Math.PI;
-			by.colliding = true;
-			setTimeout(function () { by.colliding = false; }, 1000 * game.time_scale);
+	detect(ant) {
+		if (!ant.colliding) {
+			ant.direction += Math.PI;
+			ant.colliding = true;
+			setTimeout(function () { ant.colliding = false; }, 1000 * game.time_scale);
 		}
 	}
 
-	//Von Fuehler erfuelt werden
-	leftProbeDetect(by) {
-		if (!by.colliding) {
-			by.direction += 1;
-			by.colliding = true;
-			setTimeout(function () { by.colliding = false; }, 100 * game.time_scale);
+	// called when the obstacle is detected by an ant's probes
+	leftProbeDetect(ant) {
+		if (!ant.colliding) {
+			ant.direction += 1;
+			ant.colliding = true;
+			setTimeout(function () { ant.colliding = false; }, 100 * game.time_scale);
 		}
 	}
-	rightProbeDetect(by) {
-		if (!by.colliding) {
-			by.direction -= 1;
-			by.colliding = true;
-			setTimeout(function () { by.colliding = false; }, 100 * game.time_scale);
+	rightProbeDetect(ant) {
+		if (!ant.colliding) {
+			ant.direction -= 1;
+			ant.colliding = true;
+			setTimeout(function () { ant.colliding = false; }, 100 * game.time_scale);
 		}
 	}
 }

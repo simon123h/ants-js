@@ -1,12 +1,11 @@
-//Konstruktor
+// discretized grid for efficient object collision detection
 class ObjectMap {
   constructor(res) {
-    // // Attribute // //
-    this.resolution = res || 15; //Aufloesung des Rasters in px
-    this.memory = new Array(); //Speicher fuer Duftstoffe
+    this.resolution = res; // resolution of the grid in px
+    this.memory = new Array();
   }
 
-  //Punkt auf Karte abfragen
+  // get array of objects at a position (x, y)
   get(x, y) {
     x = Math.floor(x / this.resolution);
     y = Math.floor(y / this.resolution);
@@ -19,7 +18,7 @@ class ObjectMap {
     return this.memory[x][y];
   }
 
-  //Punkt auf Karte setzen
+  // put an object onto the map
   push(x, y, obj) {
     x = Math.floor(x / this.resolution);
     y = Math.floor(y / this.resolution);
@@ -29,7 +28,7 @@ class ObjectMap {
     this.memory[x][y].push(obj);
   }
 
-  //Flaeche auf Karte setzen
+  // put an object that spans an area on the map
   pushArea(x, y, width, height, obj) {
     x -= width / 2 - 3;
     y -= height / 2 - 3;
@@ -50,10 +49,25 @@ class ObjectMap {
     }
   }
 
+  // rebuild the map
   rebuild() {
     this.memory = new Array();
     for (var obj of game.objects) {
+      if (obj.constructor == Ant) continue;
       this.pushArea(obj.x, obj.y, obj.image.width, obj.image.height, obj,);
     }
   }
+
+  // draw the object map (for debugging purposes)
+  draw(context) {
+    for (var i = 0; i < this.memory.length; i++) {
+      if (typeof (this.memory[i]) != "undefined")
+        for (var j = 0; j < this.memory[i].length; j++) {
+          if (typeof (this.memory[i][j]) != "undefined") context.fillStyle = "#F00";
+          else context.fillStyle = "#FFF";
+          context.fillRect(i * this.resolution, j * this.resolution, this.resolution, this.resolution);
+        }
+    }
+  }
+
 }

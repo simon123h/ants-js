@@ -1,13 +1,11 @@
-//Speicher-Array
-monitorAromas = new Array();
-
-//Konstruktor
-class Aroma {
+// Scent emitted by ants
+class Scent {
   constructor(res, color, max) {
-    this.resolution = res; //Aufloesung des Rasters in px
+    this.resolution = res; // resolution of the grid in px
     this.color = color; // color for visualization
     this.max = max; // max value for visualization
-    this.memory = new Array(); //Speicher fuer Duftstoffe
+    this.memory = new Array();
+    // initialize memory array
     var xMax = window.innerWidth / this.resolution;
     var yMax = window.innerHeight / this.resolution;
     for (var i = 0; i < xMax; i++) {
@@ -18,8 +16,8 @@ class Aroma {
     }
   }
 
-  //Wert in Duftstoff-Feld abfragen
-  get(x, y, ant) {
+  // obtain value of scent at a position (x, y)
+  get(x, y) {
     var x = Math.floor(x / this.resolution);
     var y = Math.floor(y / this.resolution);
     if (
@@ -31,15 +29,14 @@ class Aroma {
     return this.memory[x][y];
   };
 
-  //Wert in Duftstoff-Feld ablegen
-  push(x, y, value, radius) {
+  // increase the value of the scent at a position (x, y)
+  push(x, y, value) {
     var x = Math.floor(x / this.resolution);
     var y = Math.floor(y / this.resolution);
-    if (typeof this.memory[x][y] == "undefined") {
-      //console.log("AromaException: Memory index out of bound! Tried to access memory["+x+"]["+y+"].");
+    if (typeof this.memory[x][y] == "undefined")
       return;
-    }
     this.memory[x][y] += value;
+    // also put some scent to the surroundings
     if (
       typeof this.memory[x + 1] != "undefined" &&
       typeof this.memory[x + 1][y + 1] != "undefined"
@@ -82,7 +79,7 @@ class Aroma {
       this.memory[x - 1][y - 1] += value / 3;
   };
 
-  //Werte in Duftstoff-Feld abklingen lassen
+  // every step of game loop: decay scent intensity
   step() {
     for (var i = 0; i < this.memory.length; i++) {
       for (var j = 0; j < this.memory[i].length; j++) {
@@ -92,7 +89,7 @@ class Aroma {
     }
   };
 
-  // visualize the aroma
+  // visualize the scent
   draw(context) {
     for (var i = 0; i < this.memory.length; i++) {
       for (var j = 0; j < this.memory[i].length; j++) {

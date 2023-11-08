@@ -8,19 +8,18 @@ class Sugar extends Obj {
     this.image.width = 35;
     this.image.height = 35;
     this.amount = 250;
-    this.aromaStrength = 10;
+    this.scentStrength = 10;
     game.objMap.pushArea(this.x, this.y, 45, 45, this);
   }
 
-  detect(by) {
-    if (by.idle) {
-      by.takeSugar(this);
-    }
+  detect(ant) {
+    if (ant.idle) ant.take_sugar(this);
   };
 
   step() {
     // TODO: do not make this random-based
+    // TODO: is this even needed?
     if (Math.random() < 0.1818)
-      game.aromas.ant.push(this.x, this.y, this.aromaStrength);
+      game.scents.ant.push(this.x, this.y, this.scentStrength);
   };
 };

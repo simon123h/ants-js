@@ -1,42 +1,29 @@
 
-// Klasse fuer Ameisen
+// Class for ants
 class Ant extends Obj {
 	constructor(x, y, probeLength) {
 		super();
-
-		this.x = x || window.innerWidth * Math.random(); // x-Position
-		this.y = y || window.innerHeight * Math.random(); // y-Position
-		this.rad = 10; // Radius
-		this.speed = 3; // Translationsgeschwindgkeit
-		this.direction = 2 * Math.PI * Math.random(); // Translationsrichtung (rad)
-		this.cargo = null; // getragene Last [Object]
-		this.idle = true; // Ist die Ameise frei fuer Aktionen? [bool]
-		this.health = 100; // Gesundheit der Ameise (0-100)
-		this.antType = null; // Art der Ameise (Arbeiter...) [Object] [Implementieren]
-		this.probeLength = probeLength || 24; // Laenge der Fuehler
-		this.image.src = "res/ant.png"; // Bildquelle zum Zeichnen
-		this.nest = undefined; // Ameisenbau [Nest]
-		this.id = AntCounter++;
+		this.x = x || window.innerWidth * Math.random(); // x position
+		this.y = y || window.innerHeight * Math.random(); // y position
+		this.rad = 10; // radius
+		this.speed = 3; // motion speed
+		this.direction = 2 * Math.PI * Math.random(); // motion direction
+		this.cargo = null; // carried load
+		this.idle = true; // is the ant idle?
+		this.probeLength = probeLength || 24; // length of the probes
+		this.image.src = "res/ant.png";
 		this.image.width = 15;
 		this.image.height = 15;
 		this.colliding = false;
-		this.idleAromaStrength = 0.001;
-		this.aromaStrength = 0;
+		this.idleScentStrength = 0.001;
+		this.scentStrength = 0;
 		this.score = 0;
 	}
 
-	// current velocity
-	get vx() {
-		return this.speed * Math.cos(this.direction);
-	}
-	get vy() {
-		return this.speed * Math.sin(this.direction);
-	}
-
-	// Make a step forwards
+	// make a step forward
 	step() {
-		this.x += this.vx;
-		this.y += this.vy;
+		this.x += this.speed * Math.cos(this.direction);
+		this.y += this.speed * Math.sin(this.direction);
 		// make sure the ant does not leave the window boundaries
 		if (this.x < this.rad / 2) {
 			this.x = this.rad / 2;
@@ -55,14 +42,14 @@ class Ant extends Obj {
 			this.direction = 2 * Math.PI * Math.random();
 		}
 		// occasionally change direction
-		// if(Math.random()<0.02) this.direction += 1.5*(Math.random()-0.5);
-		// TODO: better not make this random-based for performance reasons
-		if (Math.random() < 0.15) this.emitAntAroma();
+		// if (Math.random() < 0.02) this.direction += 1.5 * (Math.random() - 0.5);
+		// TODO: do not make this random-based for performance reasons
+		if (Math.random() < 0.15) this.emitAntScent();
 		if (Math.random() < 0.4) this.nose();
 		if (Math.random() < 0.4) this.detectObjects();
 	}
 
-	// Nach Duftstoffen schnuppern und Entscheidungen treffen
+	// pick up scents and make movement decisions based on the scents around it
 	nose() {
 		var range = this.probeLength;
 		// unit vector parallel to the movement direction
@@ -87,30 +74,30 @@ class Ant extends Obj {
 		};
 		var leftVal = 0;
 		var rightVal = 0;
-		leftVal = game.aromas.ant.get(leftProbe1.x, leftProbe1.y, this);
-		rightVal = game.aromas.ant.get(rightProbe1.x, rightProbe1.y, this);
-		leftVal = game.aromas.ant.get(leftProbe2.x, leftProbe2.y, this);
-		rightVal = game.aromas.ant.get(rightProbe2.x, rightProbe2.y, this);
+		leftVal = game.scents.ant.get(leftProbe1.x, leftProbe1.y);
+		rightVal = game.scents.ant.get(rightProbe1.x, rightProbe1.y);
+		leftVal = game.scents.ant.get(leftProbe2.x, leftProbe2.y);
+		rightVal = game.scents.ant.get(rightProbe2.x, rightProbe2.y);
 		if (this.cargo == "sugar") {
-			leftVal += game.aromas.nest.get(leftProbe1.x, leftProbe1.y, this);
-			rightVal += game.aromas.nest.get(rightProbe1.x, rightProbe1.y, this);
-			leftVal += game.aromas.nest.get(leftProbe2.x, leftProbe2.y, this);
-			rightVal += game.aromas.nest.get(rightProbe2.x, rightProbe2.y, this);
+			leftVal += game.scents.nest.get(leftProbe1.x, leftProbe1.y);
+			rightVal += game.scents.nest.get(rightProbe1.x, rightProbe1.y);
+			leftVal += game.scents.nest.get(leftProbe2.x, leftProbe2.y);
+			rightVal += game.scents.nest.get(rightProbe2.x, rightProbe2.y);
 		} else if (this.idle == true) {
-			leftVal += game.aromas.sugar.get(leftProbe1.x, leftProbe1.y, this);
-			rightVal += game.aromas.sugar.get(rightProbe1.x, rightProbe1.y, this);
-			leftVal += game.aromas.sugar.get(leftProbe2.x, leftProbe2.y, this);
-			rightVal += game.aromas.sugar.get(rightProbe2.x, rightProbe2.y, this);
+			leftVal += game.scents.sugar.get(leftProbe1.x, leftProbe1.y);
+			rightVal += game.scents.sugar.get(rightProbe1.x, rightProbe1.y);
+			leftVal += game.scents.sugar.get(leftProbe2.x, leftProbe2.y);
+			rightVal += game.scents.sugar.get(rightProbe2.x, rightProbe2.y);
 		}
 		if (leftVal > rightVal) this.direction -= Math.random() * 0.5;
 		if (leftVal < rightVal) this.direction += Math.random() * 0.5;
 	}
 
 	// emit ant scent
-	emitAntAroma() {
-		game.aromas.ant.push(this.x, this.y, this.aromaStrength + this.idleAromaStrength);
-		if (this.cargo == "sugar") game.aromas.sugar.push(this.x, this.y, 3);
-		if (this.idle == true) game.aromas.nest.push(this.x, this.y, 1);
+	emitAntScent() {
+		game.scents.ant.push(this.x, this.y, this.scentStrength + this.idleScentStrength);
+		if (this.cargo == "sugar") game.scents.sugar.push(this.x, this.y, 3);
+		if (this.idle == true) game.scents.nest.push(this.x, this.y, 1);
 	}
 
 	// search for objects in the current location and possibly interact
@@ -120,8 +107,10 @@ class Ant extends Obj {
 
 		// objects at the probes
 		var range = this.probeLength * 0.3;
-		var e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) }; // Einheitsvektor parallel zu Bewegungsrichtung
-		var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) }; // Einheitsvektor normal zu Bewegungsrichtung
+		// unit vector parallel to the movement direction
+		var e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) };
+		// unit vector normal to the movement direction
+		var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
 		var leftProbe = {
 			x: this.x + range * (2 * e_p.x + e_n.x),
 			y: this.y + range * (2 * e_p.y + e_n.y),
@@ -142,8 +131,8 @@ class Ant extends Obj {
 			}
 	}
 
-	// carry sugar
-	takeSugar(sugar) {
+	// carry some sugar
+	take_sugar(sugar) {
 		this.image.src = "res/antWithSugar.png";
 		this.direction += Math.PI;
 		this.idle = false;
@@ -152,27 +141,26 @@ class Ant extends Obj {
 		if (sugar.amount < 1) {
 			game.remove_object(sugar);
 			game.add_object(new Sugar());
-			// evolveAnts(20);
+			evolveAnts(20);
 		}
 	}
 
-	// Zucker ablegen
-	deploySugar() {
+	// deploy sugar at nest
+	deploy_sugar() {
 		if (this.cargo != "sugar") return;
 		this.image.src = "res/ant.png";
 		this.idle = true;
 		this.direction += Math.PI;
 		this.cargo = null;
 		this.score++;
-		// new Ant(250, 250);
 	}
 
-	// Eine Weile lang Aroma senden
+	// emit a stronger scent for a while
 	excite() {
-		this.aromaStrength = 2;
+		this.scentStrength = 2;
 		var curAnt = this;
 		setTimeout(function () {
-			curAnt.aromaStrength = 0;
+			curAnt.scentStrength = 0;
 		}, 7500 * game.time_scale);
 	}
 
