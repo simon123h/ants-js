@@ -1,64 +1,30 @@
-//Objekte zaehlen
+// TODO: remove this global variable
 objCounter = 0;
-objs = new Array();
 
-//Klasse fuer Objekte
-Obj = function (x, y) {
-  objs.push(this);
+// Class for all objects
+class Obj {
+  constructor(x, y) {
+    this.x = x || window.innerWidth * Math.random(); //x-Position
+    this.y = y || window.innerHeight * Math.random(); //y-Position
+    this.direction = 0; // current direction of movement (rad)
+    this.image = new Image();
+    this.id = objCounter++;
+    this.stackable = true;
+  }
 
-  // // Attribute // //
-  this.x = x || window.innerWidth * Math.random(); //x-Position [int]
-  this.y = y || window.innerHeight * Math.random(); //y-Position [int]
-  this.direction = 0; //Ausrichtung (radians) [int]
-  this.drawable = true; //Zeichenbar [bool]
-  this.portable = false; //Tragbar [bool]
-  this.image = new Image();
-  this.id = objCounter++;
-  this.stackable = true;
-  this.detectable = false;
+  // called at every step during the game loop
+  step() { }
 
-  // // Getter/Setter // //
-  this.getX = function () {
-    return this.x;
-  };
-  this.getY = function () {
-    return this.y;
-  };
-  this.getPosition = function () {
-    return this.x + ":" + this.y;
-  };
-
-  // // Methoden // //
-
-  this.toString = function () {
-    return "Obj. #" + this.id;
-  };
-
-  //erfuehlt werden von Ameise
-  this.detect = function (by) {
-    if (this.detectable) console.log(by.toString() + " hit " + this.toString());
-  };
-
-  //Von Fuehler erfuelt werden
-  this.leftProbeDetect = function (by) {};
-  this.rightProbeDetect = function (by) {};
-
-  //Getragen werden
-  this.onCarried = function (carrier) {
-    detectable = false;
-    objMap.rebuild();
-  };
-
-  //abgestellt werden
-  this.onUnCarried = function (carrier) {
-    this.detectable = true;
-    objMap.rebuild();
-  };
+  // called if the object is detected by an ant
+  detect(by) { }
+  // called if the object is probed by an ant
+  leftProbeDetect(by) { }
+  rightProbeDetect(by) { }
 
   //Entfernt werden
-  this.die = function () {
-    var index = objs.indexOf(this);
-    objs.splice(index, 1);
-    objMap.rebuild();
-  };
-};
+  remove() {
+    var index = game.objects.indexOf(this);
+    game.objects.splice(index, 1);
+    game.objMap.rebuild();
+  }
+}

@@ -1,11 +1,13 @@
 //Konstruktor
-ObjectMap = function (res) {
-  // // Attribute // //
-  this.resolution = res || 15; //Aufloesung des Rasters in px [int]
-  this.memory = new Array(); //Speicher fuer Duftstoffe [ int[int][int] ]
+class ObjectMap {
+  constructor(res) {
+    // // Attribute // //
+    this.resolution = res || 15; //Aufloesung des Rasters in px
+    this.memory = new Array(); //Speicher fuer Duftstoffe
+  }
 
   //Punkt auf Karte abfragen
-  this.get = function (x, y) {
+  get(x, y) {
     x = Math.floor(x / this.resolution);
     y = Math.floor(y / this.resolution);
     if (
@@ -15,20 +17,20 @@ ObjectMap = function (res) {
       return new Array();
     }
     return this.memory[x][y];
-  };
+  }
 
   //Punkt auf Karte setzen
-  this.push = function (x, y, obj) {
+  push(x, y, obj) {
     x = Math.floor(x / this.resolution);
     y = Math.floor(y / this.resolution);
     if (typeof this.memory[x] == "undefined") this.memory[x] = new Array();
     if (typeof this.memory[x][y] == "undefined")
       this.memory[x][y] = new Array();
     this.memory[x][y].push(obj);
-  };
+  }
 
   //Flaeche auf Karte setzen
-  this.pushArea = function (x, y, width, height, obj) {
+  pushArea(x, y, width, height, obj) {
     x -= width / 2 - 3;
     y -= height / 2 - 3;
     var xi = Math.floor(x / this.resolution);
@@ -46,23 +48,12 @@ ObjectMap = function (res) {
       }
       xi++;
     }
-  };
+  }
 
-  this.rebuild = function () {
+  rebuild() {
     this.memory = new Array();
-    for (var i = 0; i < objs.length; i++) {
-      if (objs[i].detectable) {
-        curObj = objs[i];
-        this.pushArea(
-          curObj.x,
-          curObj.y,
-          curObj.image.width,
-          curObj.image.height,
-          curObj,
-        );
-      }
+    for (var obj of game.objects) {
+      this.pushArea(obj.x, obj.y, obj.image.width, obj.image.height, obj,);
     }
-  };
-};
-
-objMap = new ObjectMap();
+  }
+}

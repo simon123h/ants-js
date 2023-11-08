@@ -1,26 +1,18 @@
 
+class Nest extends Obj {
+	constructor(x, y) {
+		super();
 
-
-//Klasse fuer Ameisennester
-Nest = function (x, y) {
-	Obj.call(this);
-
-	this.x = x || window.innerWidth * Math.random();	//x-Position [int]
-	this.y = y || window.innerHeight * Math.random();	//y-Position [int]
-	this.image.src = "res/nest.png";
-	this.image.width = 120;
-	this.image.height = 120;
-	this.aromaStrength = 10;
-	this.detectable = true;
-	objMap.pushArea(this.x, this.y, this.image.width, this.image.height, this);
-
-
-
-	this.toString = function () {
-		return "Nest #" + this.id;
+		this.x = x || window.innerWidth * Math.random();	//x-Position [int]
+		this.y = y || window.innerHeight * Math.random();	//y-Position [int]
+		this.image.src = "res/nest.png";
+		this.image.width = 120;
+		this.image.height = 120;
+		this.aromaStrength = 10;
+		game.objMap.pushArea(this.x, this.y, this.image.width, this.image.height, this);
 	}
 
-	this.detect = function (by) {
+	detect(by) {
 		if (!by.colliding) {
 			if (by.cargo == "sugar") by.deploySugar();
 			by.excite();
@@ -29,23 +21,25 @@ Nest = function (x, y) {
 		}
 	}
 
-	this.active = function () {
+	active() {
 		var curNest = this;
 		this.activeInterval = setInterval(function () {
-			antAroma.push(curNest.x + (Math.random() - 0.5) * 100, curNest.y + (Math.random() - 0.5) * 100, curNest.aromaStrength);
+			game.aromas.ant.push(curNest.x + (Math.random() - 0.5) * 100, curNest.y + (Math.random() - 0.5) * 100, curNest.aromaStrength);
 		}, 100 * game.time_scale);
 	}
-	this.active();
 
-	this.stop = function () {
+	// TODO: reactivate
+	// this.active();
+
+	stop() {
 		clearInterval(this.activeInterval);
 	}
 
-	this.die = function () {
+	remove() {
 		this.stop();
 		var index = objs.indexOf(this);
 		objs.splice(index, 1);
-		objMap.rebuild();
+		game.objMap.rebuild();
 	}
 }
 

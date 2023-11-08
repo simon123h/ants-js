@@ -1,67 +1,43 @@
-ants = new Array();
-antAroma = new Aroma();
 
-nestAroma = new Aroma();
-sugarAroma = new Aroma();
+// Klasse fuer Ameisen
+class Ant extends Obj {
+	constructor(x, y, probeLength) {
+		super();
 
-//Klasse fuer Ameisen
-Ant = function (x, y, color, probeLength) {
-	Obj.call(this);
-	ants.push(this);
+		this.x = x || window.innerWidth * Math.random(); // x-Position
+		this.y = y || window.innerHeight * Math.random(); // y-Position
+		this.rad = 10; // Radius
+		this.speed = 3; // Translationsgeschwindgkeit
+		this.direction = 2 * Math.PI * Math.random(); // Translationsrichtung (rad)
+		this.cargo = null; // getragene Last [Object]
+		this.idle = true; // Ist die Ameise frei fuer Aktionen? [bool]
+		this.health = 100; // Gesundheit der Ameise (0-100)
+		this.antType = null; // Art der Ameise (Arbeiter...) [Object] [Implementieren]
+		this.probeLength = probeLength || 24; // Laenge der Fuehler
+		this.image.src = "res/ant.png"; // Bildquelle zum Zeichnen
+		this.nest = undefined; // Ameisenbau [Nest]
+		this.id = AntCounter++;
+		this.image.width = 15;
+		this.image.height = 15;
+		this.colliding = false;
+		this.idleAromaStrength = 0.001;
+		this.aromaStrength = 0;
+		this.score = 0;
+	}
 
-	// // Attribute // //
-	this.x = x || window.innerWidth * Math.random(); //x-Position [int]
-	this.y = y || window.innerHeight * Math.random(); //y-Position [int]
-	this.rad = 10; //Radius [int]
-	this.speed = 3; //Translationsgeschwindgkeit [int]
-	this.direction = 2 * Math.PI * Math.random(); //Translationsrichtung (radians) [int]
-	this.color = color || "#F00"; //Farbe (Farbcode) [String]
-	this.cargo = null; //getragene Last [Object] [portable]
-	this.idle = true; //Ist die Ameise frei fuer Aktionen? [bool]
-	this.health = 100; //Gesundheit der Ameise (0-100) [int]
-	this.antType = null; //Art der Ameise (Arbeiter...) [Object] [Implementieren]
-	this.probeLength = probeLength || 24; //Laenge der Fuehler
-	this.image.src = "res/ant.png"; //Bildquelle zum Zeichnen [string]
-	this.nest = undefined; //Ameisenbau [Nest]
-	this.id = AntCounter++;
-	this.image.width = 15;
-	this.image.height = 15;
-	this.colliding = false;
-	this.idleAromaStrength = 0.001;
-	this.aromaStrength = 0;
-	this.score = 0;
-
-	// // Getter/Setter // //
-	this.getX = function () {
-		return this.x;
-	};
-	this.getY = function () {
-		return this.y;
-	};
-	this.getPosition = function () {
-		return this.x + ":" + this.y;
-	};
-	this.getSpeedX = function () {
+	// current velocity
+	get vx() {
 		return this.speed * Math.cos(this.direction);
-	}; //Welche Geschwindigkeit in X-Richtung?
-	this.getSpeedY = function () {
+	}
+	get vy() {
 		return this.speed * Math.sin(this.direction);
-	}; //Welche Geschwindigkeit in Y-Richtung?
-	this.getColor = function () {
-		return this.color;
-	};
+	}
 
-	// // Main Functions // //
-
-	this.toString = function () {
-		return "Ant #" + this.id;
-	};
-
-	//Ein Schritt vorwaerts
-	this.step = function () {
-		this.x += this.speed * Math.cos(this.direction);
-		this.y += this.speed * Math.sin(this.direction);
-
+	// Make a step forwards
+	step() {
+		this.x += this.vx;
+		this.y += this.vy;
+		// make sure the ant does not leave the window boundaries
 		if (this.x < this.rad / 2) {
 			this.x = this.rad / 2;
 			this.direction = 2 * Math.PI * Math.random();
@@ -78,32 +54,21 @@ Ant = function (x, y, color, probeLength) {
 			this.y = window.innerHeight - this.rad / 2;
 			this.direction = 2 * Math.PI * Math.random();
 		}
+		// occasionally change direction
+		// if(Math.random()<0.02) this.direction += 1.5*(Math.random()-0.5);
+		// TODO: better not make this random-based for performance reasons
+		if (Math.random() < 0.15) this.emitAntAroma();
+		if (Math.random() < 0.4) this.nose();
+		if (Math.random() < 0.4) this.detectObjects();
+	}
 
-		//if(Math.random()<0.02) this.direction += 1.5*(Math.random()-0.5);	//Zufaelliger Richtungswechsel
-	};
-
-	//Bewegung starten
-	this.move = function () {
-		var curAnt = this;
-		this.movementInterval = setInterval(function () {
-			curAnt.step();
-			if (Math.random() < 0.15) curAnt.emitAntAroma();
-			if (Math.random() < 0.4) curAnt.nose();
-			if (Math.random() < 0.4) curAnt.detectObjects();
-		}, 40 * game.time_scale);
-	};
-	this.move();
-
-	//Bewegung stoppen
-	this.stop = function () {
-		clearInterval(this.movementInterval);
-	};
-
-	//Nach Duftstoffen schnuppern und Entscheidungen treffen
-	this.nose = function () {
+	// Nach Duftstoffen schnuppern und Entscheidungen treffen
+	nose() {
 		var range = this.probeLength;
-		var e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) }; //Einheitsvektor parallel zu Bewegungsrichtung
-		var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) }; //Einheitsvektor normal zu Bewegungsrichtung
+		// unit vector parallel to the movement direction
+		var e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) };
+		// unit vector normal to the movement direction
+		var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
 		var leftProbe1 = {
 			x: this.x + range * (e_p.x + e_n.x),
 			y: this.y + range * (e_p.y + e_n.y),
@@ -122,46 +87,41 @@ Ant = function (x, y, color, probeLength) {
 		};
 		var leftVal = 0;
 		var rightVal = 0;
-		leftVal = antAroma.get(leftProbe1.x, leftProbe1.y, this);
-		rightVal = antAroma.get(rightProbe1.x, rightProbe1.y, this);
-		leftVal = antAroma.get(leftProbe2.x, leftProbe2.y, this);
-		rightVal = antAroma.get(rightProbe2.x, rightProbe2.y, this);
+		leftVal = game.aromas.ant.get(leftProbe1.x, leftProbe1.y, this);
+		rightVal = game.aromas.ant.get(rightProbe1.x, rightProbe1.y, this);
+		leftVal = game.aromas.ant.get(leftProbe2.x, leftProbe2.y, this);
+		rightVal = game.aromas.ant.get(rightProbe2.x, rightProbe2.y, this);
 		if (this.cargo == "sugar") {
-			leftVal += nestAroma.get(leftProbe1.x, leftProbe1.y, this);
-			rightVal += nestAroma.get(rightProbe1.x, rightProbe1.y, this);
-			leftVal += nestAroma.get(leftProbe2.x, leftProbe2.y, this);
-			rightVal += nestAroma.get(rightProbe2.x, rightProbe2.y, this);
+			leftVal += game.aromas.nest.get(leftProbe1.x, leftProbe1.y, this);
+			rightVal += game.aromas.nest.get(rightProbe1.x, rightProbe1.y, this);
+			leftVal += game.aromas.nest.get(leftProbe2.x, leftProbe2.y, this);
+			rightVal += game.aromas.nest.get(rightProbe2.x, rightProbe2.y, this);
 		} else if (this.idle == true) {
-			leftVal += sugarAroma.get(leftProbe1.x, leftProbe1.y, this);
-			rightVal += sugarAroma.get(rightProbe1.x, rightProbe1.y, this);
-			leftVal += sugarAroma.get(leftProbe2.x, leftProbe2.y, this);
-			rightVal += sugarAroma.get(rightProbe2.x, rightProbe2.y, this);
+			leftVal += game.aromas.sugar.get(leftProbe1.x, leftProbe1.y, this);
+			rightVal += game.aromas.sugar.get(rightProbe1.x, rightProbe1.y, this);
+			leftVal += game.aromas.sugar.get(leftProbe2.x, leftProbe2.y, this);
+			rightVal += game.aromas.sugar.get(rightProbe2.x, rightProbe2.y, this);
 		}
 		if (leftVal > rightVal) this.direction -= Math.random() * 0.5;
 		if (leftVal < rightVal) this.direction += Math.random() * 0.5;
-	};
+	}
 
-	//Duftstoffe emitieren
-	this.emitAntAroma = function () {
-		antAroma.push(this.x, this.y, this.aromaStrength + this.idleAromaStrength);
+	// emit ant scent
+	emitAntAroma() {
+		game.aromas.ant.push(this.x, this.y, this.aromaStrength + this.idleAromaStrength);
+		if (this.cargo == "sugar") game.aromas.sugar.push(this.x, this.y, 3);
+		if (this.idle == true) game.aromas.nest.push(this.x, this.y, 1);
+	}
 
-		if (this.cargo == "sugar") sugarAroma.push(this.x, this.y, 3);
-		if (this.idle == true) nestAroma.push(this.x, this.y, 1);
-	};
+	// search for objects in the current location and possibly interact
+	detectObjects() {
+		// objects at the current location
+		for (var obj of game.objMap.get(this.x, this.y)) obj.detect(this);
 
-	//Nach Objekten an der aktuellen Position suchen und gegebenenfalls interagieren
-	this.detectObjects = function () {
-		//An Position der Ameise
-		var objArray = objMap.get(this.x, this.y);
-		if (objArray.length > 0)
-			for (var i = 0; i < objArray.length; i++) {
-				objArray[i].detect(this);
-			}
-
-		//Mit den Fuehlern
+		// objects at the probes
 		var range = this.probeLength * 0.3;
-		var e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) }; //Einheitsvektor parallel zu Bewegungsrichtung
-		var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) }; //Einheitsvektor normal zu Bewegungsrichtung
+		var e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) }; // Einheitsvektor parallel zu Bewegungsrichtung
+		var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) }; // Einheitsvektor normal zu Bewegungsrichtung
 		var leftProbe = {
 			x: this.x + range * (2 * e_p.x + e_n.x),
 			y: this.y + range * (2 * e_p.y + e_n.y),
@@ -170,125 +130,52 @@ Ant = function (x, y, color, probeLength) {
 			x: this.x + range * (2 * e_p.x - e_n.x),
 			y: this.y + range * (2 * e_p.y - e_n.y),
 		};
-		var objArray = objMap.get(leftProbe.x, leftProbe.y);
+		var objArray = game.objMap.get(leftProbe.x, leftProbe.y);
 		if (objArray.length > 0)
 			for (var i = 0; i < objArray.length; i++) {
 				objArray[i].leftProbeDetect(this);
 			}
-		objArray = objMap.get(rightProbe.x, rightProbe.y);
+		objArray = game.objMap.get(rightProbe.x, rightProbe.y);
 		if (objArray.length > 0)
 			for (var i = 0; i < objArray.length; i++) {
 				objArray[i].rightProbeDetect(this);
 			}
-	};
+	}
 
-	//Zucker aufnehmen
-	this.takeSugar = function (obj) {
+	// carry sugar
+	takeSugar(sugar) {
 		this.image.src = "res/antWithSugar.png";
 		this.direction += Math.PI;
 		this.idle = false;
 		this.cargo = "sugar";
-		obj.amount--;
-		if (obj.amount < 1) {
-			obj.die();
-			new Sugar();
+		sugar.amount--;
+		if (sugar.amount < 1) {
+			game.remove_object(sugar);
+			game.add_object(new Sugar());
 			// evolveAnts(20);
 		}
-	};
+	}
 
-	//Zucker ablegen
-	this.deploySugar = function () {
+	// Zucker ablegen
+	deploySugar() {
 		if (this.cargo != "sugar") return;
 		this.image.src = "res/ant.png";
 		this.idle = true;
 		this.direction += Math.PI;
 		this.cargo = null;
 		this.score++;
-		//new Ant(250, 250);
-	};
+		// new Ant(250, 250);
+	}
 
-	//Eine Weile lang Aroma senden
-	this.excite = function () {
+	// Eine Weile lang Aroma senden
+	excite() {
 		this.aromaStrength = 2;
 		var curAnt = this;
 		setTimeout(function () {
 			curAnt.aromaStrength = 0;
 		}, 7500 * game.time_scale);
-	};
-
-	//Sterben
-	this.die = function () {
-		this.stop();
-		var index = objs.indexOf(this);
-		objs.splice(index, 1);
-		index = ants.indexOf(this);
-		ants.splice(index, 1);
-		objMap.rebuild();
-	};
-
-	// // Carrying & Being Carried // //
-
-	//Objekt Tragen
-	this.carry = function (obj) {
-		if (this.cargo != null) {
-			console.log(
-				"CarryException: Ant #" +
-				this.id +
-				" tried to carry the Object, but already carried something.",
-			);
-			return;
-		}
-		if (typeof obj != "undefined" && typeof obj.onCarried != "undefined") {
-			if (obj.onCarried(this) == false) return;
-			else this.cargo = obj;
-		} else {
-			console.log(
-				"CarryException: Ant #" +
-				this.id +
-				" tried to carry the Object, but failed. Object:",
-			);
-			console.log(obj);
-		}
-	};
-
-	//Objekt ablegen
-	this.unCarry = function () {
-		this.cargo.onUnCarried();
-		this.cargo = null;
-	};
-
-	//getragen werden
-	this.onCarried = function (carrier) {
-		if (!this.idle) {
-			console.log(
-				"CarryException: Ant #" +
-				carrier.id +
-				" tried to carry ant #" +
-				this.id +
-				" but it was not idle.",
-			);
-			return false;
-		}
-		console.log(
-			"Implement: Ant #" +
-			this.id +
-			" is now being carried by ant #" +
-			carrier.id +
-			".",
-		);
-		this.idle = false;
-	};
-
-	//abgestellt werden
-	this.onUnCarried = function (carrier) { };
-};
-
-//Hilfsfunktionen
-
-function getAntById(id) {
-	for (var i = 0; i < ants.length; i++) {
-		if (ants[i].id == id) return ants[i];
 	}
-	return null;
+
 }
+
 AntCounter = 0;

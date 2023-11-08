@@ -6,7 +6,7 @@ function dieLowScoreAnt() {
     if (ants[i].score < min) curAnt = ants[i];
   }
   var prev = curAnt.probeLength;
-  curAnt.die();
+  game.remove_ant(curAnt);
   return Math.round(prev);
 }
 
@@ -20,7 +20,7 @@ function reproduceTopScoreAnt() {
   new Ant(250, 250, undefined, curAnt.probeLength);
   new Ant(250, 250, undefined, curAnt.probeLength + variation);
   var prev = curAnt.probeLength;
-  curAnt.die();
+  game.remove_ant(curAnt);
   return Math.round(prev);
 }
 
@@ -41,11 +41,11 @@ function evolveAnts(strength) {
   console.log("Efficient:", b);
   console.log(
     "Evolved " +
-      strength +
-      " ants of the colony. New Average ProbeLength: " +
-      Math.round(100 * averageProbeLength()) / 100 +
-      " +/- " +
-      Math.round(100 * ProbeLengthVariance()) / 100,
+    strength +
+    " ants of the colony. New Average ProbeLength: " +
+    Math.round(100 * averageProbeLength()) / 100 +
+    " +/- " +
+    Math.round(100 * ProbeLengthVariance()) / 100,
   );
 }
 
