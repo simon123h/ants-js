@@ -8,7 +8,6 @@ class Nest extends Obj {
 		this.image.width = 120;
 		this.image.height = 120;
 		this.scentStrength = 10;
-		game.objMap.pushArea(this.x, this.y, this.image.width, this.image.height, this);
 	}
 
 	detect(ant) {

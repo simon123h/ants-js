@@ -103,8 +103,8 @@ class Ant extends Obj {
 	// search for objects in the current location and possibly interact
 	detectObjects() {
 		// objects at the current location
-		for (var obj of game.objMap.get(this.x, this.y)) obj.detect(this);
-
+		for (var obj of game.objMap.get(this.x, this.y))
+			obj.detect(this);
 		// objects at the probes
 		var range = this.probeLength * 0.3;
 		// unit vector parallel to the movement direction
@@ -119,16 +119,10 @@ class Ant extends Obj {
 			x: this.x + range * (2 * e_p.x - e_n.x),
 			y: this.y + range * (2 * e_p.y - e_n.y),
 		};
-		var objArray = game.objMap.get(leftProbe.x, leftProbe.y);
-		if (objArray.length > 0)
-			for (var i = 0; i < objArray.length; i++) {
-				objArray[i].leftProbeDetect(this);
-			}
-		objArray = game.objMap.get(rightProbe.x, rightProbe.y);
-		if (objArray.length > 0)
-			for (var i = 0; i < objArray.length; i++) {
-				objArray[i].rightProbeDetect(this);
-			}
+		for (var obj of game.objMap.get(leftProbe.x, leftProbe.y))
+			obj.leftProbeDetect(this);
+		for (var obj of game.objMap.get(rightProbe.x, rightProbe.y))
+			obj.rightProbeDetect(this);
 	}
 
 	// carry some sugar
@@ -161,7 +155,7 @@ class Ant extends Obj {
 		var curAnt = this;
 		setTimeout(function () {
 			curAnt.scentStrength = 0;
-		}, 7500 * game.time_scale);
+		}, 1500);
 	}
 
 }

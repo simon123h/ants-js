@@ -14,7 +14,7 @@ class Obstacle extends Obj {
 		if (!ant.colliding) {
 			ant.direction += Math.PI;
 			ant.colliding = true;
-			setTimeout(function () { ant.colliding = false; }, 1000 * game.time_scale);
+			setTimeout(function () { ant.colliding = false; }, 200);
 		}
 	}
 
@@ -23,14 +23,14 @@ class Obstacle extends Obj {
 		if (!ant.colliding) {
 			ant.direction += 1;
 			ant.colliding = true;
-			setTimeout(function () { ant.colliding = false; }, 100 * game.time_scale);
+			setTimeout(function () { ant.colliding = false; }, 20);
 		}
 	}
 	rightProbeDetect(ant) {
 		if (!ant.colliding) {
 			ant.direction -= 1;
 			ant.colliding = true;
-			setTimeout(function () { ant.colliding = false; }, 100 * game.time_scale);
+			setTimeout(function () { ant.colliding = false; }, 20);
 		}
 	}
 }

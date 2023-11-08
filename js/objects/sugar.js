@@ -9,7 +9,6 @@ class Sugar extends Obj {
     this.image.height = 35;
     this.amount = 250;
     this.scentStrength = 10;
-    game.objMap.pushArea(this.x, this.y, 45, 45, this);
   }
 
   detect(ant) {

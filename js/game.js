@@ -1,7 +1,5 @@
 class AntGame {
   constructor() {
-    this.time = 0;
-    this.time_scale = 0.2;
     // array of objects in the game (including ants)
     this.objects = [];
     // array of scents in the game
