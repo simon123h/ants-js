@@ -19,6 +19,13 @@ window.onload = function () {
   // game.add_object(new Obstacle(window.innerWidth+25, window.innerHeight/2-25, 50, window.innerHeight+50));
   // game.add_object(new Obstacle(window.innerWidth/2-25, -25, window.innerWidth+50, 50));
   // game.add_object(new Obstacle(window.innerWidth/2-25, window.innerHeight+25, window.innerWidth+60, 50));
+
+  // add new scent by clicking
+  document.getElementById("frame").onclick = function (e) {
+    var x = e.pageX;
+    var y = e.pageY;
+    game.scents.ant.push(x, y, 100);
+  };
 };
 
 // start the game and visualization loops
@@ -46,12 +53,12 @@ function overlay() {
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
   context.clearRect(0, 0, canvas.width, canvas.height);
-  for (var a in game.scents) {
+  if (!game.settings.scent_view) return;
+  for (var a in game.scents)
     game.scents[a].draw(context);
-  }
 
   // draw the ObjectMap (for debugging)
-  // game.objMap.draw();
+  // game.objMap.draw(context);
 
 }
 
@@ -69,11 +76,4 @@ function drawRotated(context, image, x, y, angle) {
   );
   context.restore();
 }
-
-// add new scent by clicking
-document.onclick = function (e) {
-  var x = e.pageX;
-  var y = e.pageY;
-  game.scents.ant.push(x, y, 100);
-};
 

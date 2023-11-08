@@ -19,3 +19,10 @@
 	margin: 0px;
 	padding: 0px;
 }
+
+#settings {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	padding: 5px;
+}

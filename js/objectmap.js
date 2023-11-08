@@ -63,8 +63,10 @@ class ObjectMap {
     for (var i = 0; i < this.memory.length; i++) {
       if (typeof (this.memory[i]) != "undefined")
         for (var j = 0; j < this.memory[i].length; j++) {
-          if (typeof (this.memory[i][j]) != "undefined") context.fillStyle = "#F00";
-          else context.fillStyle = "#FFF";
+          if (typeof (this.memory[i][j]) != "undefined")
+            context.fillStyle = "#F00";
+          else
+            context.fillStyle = "#FFF";
           context.fillRect(i * this.resolution, j * this.resolution, this.resolution, this.resolution);
         }
     }

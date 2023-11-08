@@ -13,6 +13,9 @@ class AntGame {
     this.game_intvl = null;
     // game object map, TODO: can I find some better algorithm for this?
     this.objMap = new ObjectMap(15);
+    this.settings = {
+      scent_view: true,
+    }
   }
 
   // do a step for every object in the game
