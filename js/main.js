@@ -1,8 +1,14 @@
-//Spielzeit
-t__ = 0.2;
+
+// global variable for the current game
+var game = null;
+// generate a new game
+// TODO: move this into the onload function
+game = new AntGame();
 
 window.onload = function () {
-  syncCanvas();
+  // visualization loop
+  start_visualization();
+  // generate objects in the game
   setTimeout(function () {
     for (var i = 0; i < 1; i++) new Nest(280, 280);
     for (var i = 0; i < 2; i++) new Obstacle();
@@ -11,39 +17,35 @@ window.onload = function () {
     for (var i = 0; i < 3; i++) new Sugar();
     for (var i = 0; i < 80; i++) new Ant(250, 250, undefined, 24);
 
-    //Aroma Overlay
+    // Aroma Overlay
     sugarAroma.monitor(0, 0, 255, 37);
     antAroma.monitor(255, 0, 0, 80);
     nestAroma.monitor(220, 220, 0, 30);
 
-    //Grenzen
+    // Grenzen
     /*
-		new Obstacle(-25, window.innerHeight/2-25, 50, window.innerHeight+50);
-		new Obstacle(window.innerWidth+25, window.innerHeight/2-25, 50, window.innerHeight+50);
-		new Obstacle(window.innerWidth/2-25, -25, window.innerWidth+50, 50);
-		new Obstacle(window.innerWidth/2-25, window.innerHeight+25, window.innerWidth+60, 50);
-		*/
+    new Obstacle(-25, window.innerHeight/2-25, 50, window.innerHeight+50);
+    new Obstacle(window.innerWidth+25, window.innerHeight/2-25, 50, window.innerHeight+50);
+    new Obstacle(window.innerWidth/2-25, -25, window.innerWidth+50, 50);
+    new Obstacle(window.innerWidth/2-25, window.innerHeight+25, window.innerWidth+60, 50);
+    */
   });
 };
 
+// add new scent by clicking
 document.onclick = function (e) {
   var x = e.pageX;
   var y = e.pageY;
   antAroma.push(x, y, 100);
 };
 
-//Canvas synchronisieren
-function syncCanvas() {
+// start the visualization loop
+function start_visualization() {
   canvasIntvl = setInterval(redraw, 20);
   overlayIntvl = setInterval(overlay, 90);
 }
 
-function stopCanvasSync() {
-  if (typeof canvasIntvl != "undefined") clearInterval(canvasIntvl);
-  if (typeof overlayIntvl != "undefined") clearInterval(overlayIntvl);
-}
-
-//Objekte und Umgebung zeichnen
+// draw all objects in the game
 function redraw() {
   var canvas = document.getElementById("frame");
   var context = canvas.getContext("2d");
@@ -58,7 +60,7 @@ function redraw() {
   }
 }
 
-//Debug Overlay
+// draw the scent overlay
 function overlay() {
   canvas = document.getElementById("overlay");
   context = canvas.getContext("2d");
@@ -92,19 +94,19 @@ function overlay() {
   }
 
   /*
-	var mem = objMap.memory;
-	for(var i=0; i<mem.length; i++){
-		if(typeof(mem[i])!="undefined")
-		for(var j=0; j<mem[i].length; j++){
-			if(typeof(mem[i][j])!="undefined") context.fillStyle = "#F00";
-			else context.fillStyle = "#FFF";
-			context.fillRect(i*objMap.resolution, j*objMap.resolution, objMap.resolution, objMap.resolution);
-		}
-	}
-	*/
+  var mem = objMap.memory;
+  for(var i=0; i<mem.length; i++){
+    if(typeof(mem[i])!="undefined")
+    for(var j=0; j<mem[i].length; j++){
+      if(typeof(mem[i][j])!="undefined") context.fillStyle = "#F00";
+      else context.fillStyle = "#FFF";
+      context.fillRect(i*objMap.resolution, j*objMap.resolution, objMap.resolution, objMap.resolution);
+    }
+  }
+  */
 }
 
-//Hilfsfunktion um Objekte gedreht zu malen
+// auxiliary function to draw rotated images
 function drawRotated(context, image, x, y, angle) {
   context.save();
   context.translate(x, y);
@@ -119,10 +121,6 @@ function drawRotated(context, image, x, y, angle) {
   context.restore();
 }
 
-//Debug
-function newAnts(n) {
-  for (var i = 0; i < n; i++) new Ant();
-}
-function undoObj() {
-  objs[objs.length - 1].die();
-}
+// auxiliary functions for debugging
+function newAnts(n) { for (var i = 0; i < n; i++) new Ant(); }
+function undoObj() { objs[objs.length - 1].die(); }

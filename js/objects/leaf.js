@@ -1,8 +1,6 @@
-
 //Klasse fuer Blaetter
 Leaf = function (x, y) {
-	Obstacle.call(this);
+  Obstacle.call(this);
 
-	this.portable = true;
-
-}
+  this.portable = true;
+};

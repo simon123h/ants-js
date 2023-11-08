@@ -20,7 +20,7 @@ Obstacle = function (x, y, width, height) {
 		if (!by.colliding) {
 			by.direction += Math.PI;
 			by.colliding = true;
-			setTimeout(function () { by.colliding = false; }, 1000 * t__);
+			setTimeout(function () { by.colliding = false; }, 1000 * Gamepad.time_scale);
 		}
 	}
 
@@ -29,14 +29,14 @@ Obstacle = function (x, y, width, height) {
 		if (!by.colliding) {
 			by.direction += 1;
 			by.colliding = true;
-			setTimeout(function () { by.colliding = false; }, 100 * t__);
+			setTimeout(function () { by.colliding = false; }, 100 * Gamepad.time_scale);
 		}
 	}
 	this.rightProbeDetect = function (by) {
 		if (!by.colliding) {
 			by.direction -= 1;
 			by.colliding = true;
-			setTimeout(function () { by.colliding = false; }, 100 * t__);
+			setTimeout(function () { by.colliding = false; }, 100 * Gamepad.time_scale);
 		}
 	}
 }

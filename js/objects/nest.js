@@ -25,7 +25,7 @@ Nest = function (x, y) {
 			if (by.cargo == "sugar") by.deploySugar();
 			by.excite();
 			by.colliding = true;
-			setTimeout(function () { by.colliding = false; }, 1000 * t__);
+			setTimeout(function () { by.colliding = false; }, 1000 * game.time_scale);
 		}
 	}
 
@@ -33,7 +33,7 @@ Nest = function (x, y) {
 		var curNest = this;
 		this.activeInterval = setInterval(function () {
 			antAroma.push(curNest.x + (Math.random() - 0.5) * 100, curNest.y + (Math.random() - 0.5) * 100, curNest.aromaStrength);
-		}, 100 * t__);
+		}, 100 * game.time_scale);
 	}
 	this.active();
 

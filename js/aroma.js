@@ -87,7 +87,7 @@ Aroma = function (res) {
           if (curAroma.memory[i][j] < 0.01) curAroma.memory[i][j] = 0;
         }
       }
-    }, 250 * t__);
+    }, 250 * game.time_scale);
   };
 
   this.pause = function () {
