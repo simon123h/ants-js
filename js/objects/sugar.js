@@ -19,6 +19,6 @@ class Sugar extends Obj {
     // TODO: do not make this random-based
     // TODO: is this even needed?
     if (Math.random() < 0.1818)
-      game.scents.ant.push(this.x, this.y, this.scentStrength);
+      game.scents.sugar.push(this.x, this.y, this.scentStrength);
   };
 };

@@ -15,7 +15,6 @@ class Ant extends Obj {
 		this.image.width = 15;
 		this.image.height = 15;
 		this.colliding = false;
-		this.idleScentStrength = 0.001;
 		this.scentStrength = 0;
 		this.score = 0;
 	}
@@ -42,7 +41,7 @@ class Ant extends Obj {
 			this.direction = 2 * Math.PI * Math.random();
 		}
 		// TODO: do not make this random-based for performance reasons
-		if (Math.random() < 0.15) this.emitAntScent();
+		if (Math.random() < 0.25) this.emitAntScent();
 		if (Math.random() < 0.4)
 			this.nose();
 		this.detectObjects();
@@ -56,12 +55,12 @@ class Ant extends Obj {
 		// unit vector normal to the movement direction
 		var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
 		var leftProbe = {
-			x: this.x + range * (2*e_p.x + e_n.x),
-			y: this.y + range * (2*e_p.y + e_n.y),
+			x: this.x + range * (2 * e_p.x + e_n.x),
+			y: this.y + range * (2 * e_p.y + e_n.y),
 		};
 		var rightProbe = {
-			x: this.x + range * (2*e_p.x - e_n.x),
-			y: this.y + range * (2*e_p.y - e_n.y),
+			x: this.x + range * (2 * e_p.x - e_n.x),
+			y: this.y + range * (2 * e_p.y - e_n.y),
 		};
 		var leftVal = 0;
 		var rightVal = 0;
@@ -76,7 +75,7 @@ class Ant extends Obj {
 
 	// emit ant scent
 	emitAntScent() {
-		game.scents.ant.push(this.x, this.y, this.scentStrength + this.idleScentStrength);
+		game.scents.ant.push(this.x, this.y, this.scentStrength);
 		if (this.cargo == "sugar") game.scents.sugar.push(this.x, this.y, 3);
 		if (this.idle == true) game.scents.nest.push(this.x, this.y, 1);
 	}
@@ -129,16 +128,6 @@ class Ant extends Obj {
 		this.cargo = null;
 		this.score++;
 	}
-
-	// emit a stronger scent for a while
-	excite() {
-		this.scentStrength = 2;
-		var curAnt = this;
-		setTimeout(function () {
-			curAnt.scentStrength = 0;
-		}, 1500);
-	}
-
 }
 
 AntCounter = 0;

@@ -17,7 +17,9 @@ function reproduceTopScoreAnt() {
     if (ant.score > max) my_ant = ant;
   var variation = (Math.random() - 0.5) * 10;
   var nest = game.get_nest();
-  game.add_object(new Ant(nest.x, nest.y, my_ant.probeLength + variation));
+  var ant = new Ant(nest.x, nest.y, my_ant.probeLength + variation);
+  ant.speed *= 1 + 0.2 * (Math.random() - 0.5);
+  game.add_object(ant);
   var prev = my_ant.probeLength;
   my_ant.score = 0;
   return Math.round(prev);
