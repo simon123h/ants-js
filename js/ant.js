@@ -41,12 +41,11 @@ class Ant extends Obj {
 			this.y = window.innerHeight - this.rad / 2;
 			this.direction = 2 * Math.PI * Math.random();
 		}
-		// occasionally change direction
-		// if (Math.random() < 0.02) this.direction += 1.5 * (Math.random() - 0.5);
 		// TODO: do not make this random-based for performance reasons
 		if (Math.random() < 0.15) this.emitAntScent();
-		if (Math.random() < 0.4) this.nose();
-		if (Math.random() < 0.4) this.detectObjects();
+		if (Math.random() < 0.4)
+			this.nose();
+		this.detectObjects();
 	}
 
 	// pick up scents and make movement decisions based on the scents around it
@@ -56,41 +55,23 @@ class Ant extends Obj {
 		var e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) };
 		// unit vector normal to the movement direction
 		var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
-		var leftProbe1 = {
-			x: this.x + range * (e_p.x + e_n.x),
-			y: this.y + range * (e_p.y + e_n.y),
+		var leftProbe = {
+			x: this.x + range * (2*e_p.x + e_n.x),
+			y: this.y + range * (2*e_p.y + e_n.y),
 		};
-		var rightProbe1 = {
-			x: this.x + range * (e_p.x - e_n.x),
-			y: this.y + range * (e_p.y - e_n.y),
-		};
-		var leftProbe2 = {
-			x: this.x + range * (2 * e_p.x + e_n.x),
-			y: this.y + range * (2 * e_p.y + e_n.y),
-		};
-		var rightProbe2 = {
-			x: this.x + range * (2 * e_p.x - e_n.x),
-			y: this.y + range * (2 * e_p.y - e_n.y),
+		var rightProbe = {
+			x: this.x + range * (2*e_p.x - e_n.x),
+			y: this.y + range * (2*e_p.y - e_n.y),
 		};
 		var leftVal = 0;
 		var rightVal = 0;
-		leftVal = game.scents.ant.get(leftProbe1.x, leftProbe1.y);
-		rightVal = game.scents.ant.get(rightProbe1.x, rightProbe1.y);
-		leftVal = game.scents.ant.get(leftProbe2.x, leftProbe2.y);
-		rightVal = game.scents.ant.get(rightProbe2.x, rightProbe2.y);
-		if (this.cargo == "sugar") {
-			leftVal += game.scents.nest.get(leftProbe1.x, leftProbe1.y);
-			rightVal += game.scents.nest.get(rightProbe1.x, rightProbe1.y);
-			leftVal += game.scents.nest.get(leftProbe2.x, leftProbe2.y);
-			rightVal += game.scents.nest.get(rightProbe2.x, rightProbe2.y);
-		} else if (this.idle == true) {
-			leftVal += game.scents.sugar.get(leftProbe1.x, leftProbe1.y);
-			rightVal += game.scents.sugar.get(rightProbe1.x, rightProbe1.y);
-			leftVal += game.scents.sugar.get(leftProbe2.x, leftProbe2.y);
-			rightVal += game.scents.sugar.get(rightProbe2.x, rightProbe2.y);
-		}
+		leftVal = game.scents.ant.get(leftProbe.x, leftProbe.y);
+		rightVal = game.scents.ant.get(rightProbe.x, rightProbe.y);
+		var aim = (this.cargo == "sugar") ? "nest" : "sugar";
+		leftVal += game.scents[aim].get(leftProbe.x, leftProbe.y);
+		rightVal += game.scents[aim].get(rightProbe.x, rightProbe.y);
 		if (leftVal > rightVal) this.direction -= Math.random() * 0.5;
-		if (leftVal < rightVal) this.direction += Math.random() * 0.5;
+		else if (leftVal < rightVal) this.direction += Math.random() * 0.5;
 	}
 
 	// emit ant scent
