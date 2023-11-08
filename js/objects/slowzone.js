@@ -9,7 +9,7 @@ class Slowzone extends Obj {
   }
 
   detect(ant) {
-    if (ant.speed == 3) {
+    if (ant.speed > 1.1) {
       setTimeout(function () {
         ant.speed = 3;
       }, 400);

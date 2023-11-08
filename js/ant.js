@@ -7,6 +7,7 @@ class Ant extends Obj {
 		this.y = y || window.innerHeight * Math.random(); // y position
 		this.rad = 10; // radius
 		this.speed = 3; // motion speed
+  		this.speed *= 1 + 0.2 * (Math.random() - 0.5);
 		this.direction = 2 * Math.PI * Math.random(); // motion direction
 		this.cargo = null; // carried load
 		this.idle = true; // is the ant idle?
