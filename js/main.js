@@ -30,9 +30,12 @@ window.onload = function () {
 
 // start the game and visualization loops
 function start_game() {
-  setInterval(function () { game.step(); }, 20);
+  setInterval(function () {
+    game.step();
+  }, 20);
   setInterval(redraw, 20);
   setInterval(overlay, 100);
+  game.stats.start_time = performance.now() / 1000;
 }
 
 // draw all objects in the game
@@ -44,6 +47,7 @@ function redraw() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   for (var obj of game.objects)
     drawRotated(context, obj.image, obj.x, obj.y, obj.direction);
+  game.show_stats();
 }
 
 // draw the scent overlay
@@ -54,12 +58,10 @@ function overlay() {
   canvas.width = window.innerWidth;
   context.clearRect(0, 0, canvas.width, canvas.height);
   if (!game.settings.scent_view) return;
-  for (var a in game.scents)
-    game.scents[a].draw(context);
+  for (var a in game.scents) game.scents[a].draw(context);
 
   // draw the ObjectMap (for debugging)
   // game.objMap.draw(context);
-
 }
 
 // auxiliary function to draw rotated images
@@ -76,4 +78,3 @@ function drawRotated(context, image, x, y, angle) {
   );
   context.restore();
 }
-

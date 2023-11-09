@@ -128,6 +128,7 @@ class Ant extends Obj {
 		this.direction += Math.PI;
 		this.cargo = null;
 		this.score++;
+		game.stats.score++;
 	}
 }
 

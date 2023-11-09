@@ -4,9 +4,9 @@ class AntGame {
     this.objects = [];
     // array of scents in the game
     this.scents = {
-      "sugar": new Scent(15, "rgb(0, 0, 255)", 37),
-      "ant": new Scent(15, "rgb(255, 0, 0)", 80),
-      "nest": new Scent(15, "rgb(220, 220, 0)", 30),
+      ant: new Scent(15, "rgb(255, 0, 0)", 80),
+      nest: new Scent(15, "rgb(220, 220, 0)", 30),
+      sugar: new Scent(15, "rgb(0, 0, 255)", 37),
     };
 
     // the interval for the game loop
@@ -15,13 +15,16 @@ class AntGame {
     this.objMap = new ObjectMap(15);
     this.settings = {
       scent_view: true,
-    }
+    };
+    this.stats = {
+      score: 0,
+    };
   }
 
   // do a step for every object in the game
   step() {
     for (var obj of this.objects) obj.step();
-    for (var a in this.scents) this.scents[a].step()
+    for (var a in this.scents) this.scents[a].step();
   }
 
   // add an object to the game
@@ -38,12 +41,18 @@ class AntGame {
 
   // get an ant nest from the objects
   get_nest() {
-    for (var obj of game.objects)
-      if (obj.constructor == Nest)
-        return obj;
+    for (var obj of game.objects) if (obj.constructor == Nest) return obj;
   }
 
   get ants() {
-    return this.objects.filter((o) => (o.constructor == Ant));
+    return this.objects.filter((o) => o.constructor == Ant);
+  }
+
+  show_stats() {
+    var statsbox = document.getElementById("stats");
+    var time = (performance.now() - game.stats.start_time) / 1000;
+	  var rate = (game.stats.score/time).toFixed(1);
+	  var score = game.stats.score.toFixed(0);
+	  statsbox.innerHTML = `Total sugar: ${score}<br>Sugar/sec: ${rate}`;
   }
 }
