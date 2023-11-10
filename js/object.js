@@ -16,4 +16,20 @@ class Obj {
   // called if the object is probed by an ant
   leftProbeDetect(ant) { }
   rightProbeDetect(ant) { }
+
+  // draw the object onto the map
+  draw(context) {
+    context.save();
+    context.translate(this.x, this.y);
+    context.rotate(this.direction);
+    context.drawImage(
+      this.image,
+      -this.image.width / 2,
+      -this.image.height / 2,
+      this.image.width,
+      this.image.height,
+    );
+    context.restore();
+  }
+
 }

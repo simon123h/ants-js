@@ -46,7 +46,7 @@ function redraw() {
   canvas.width = window.innerWidth;
   context.clearRect(0, 0, canvas.width, canvas.height);
   for (var obj of game.objects)
-    drawRotated(context, obj.image, obj.x, obj.y, obj.direction);
+    obj.draw(context);
   game.show_stats();
 }
 
@@ -62,19 +62,4 @@ function overlay() {
 
   // draw the ObjectMap (for debugging)
   // game.objMap.draw(context);
-}
-
-// auxiliary function to draw rotated images
-function drawRotated(context, image, x, y, angle) {
-  context.save();
-  context.translate(x, y);
-  context.rotate(angle);
-  context.drawImage(
-    image,
-    -image.width / 2,
-    -image.height / 2,
-    image.width,
-    image.height,
-  );
-  context.restore();
 }
