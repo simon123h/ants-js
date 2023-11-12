@@ -115,7 +115,7 @@ class Ant extends Obj {
 		sugar.amount--;
 		if (sugar.amount < 1) {
 			game.remove_object(sugar);
-			game.add_object(new Sugar());
+			game.add_object(new Sugar(), true);
 			evolveAnts(20);
 		}
 	}

@@ -6,12 +6,12 @@ window.onload = function () {
   game = new AntGame();
   start_game();
   // generate objects in the game
-  var nest = new Nest();
-  game.add_object(nest);
   for (var i = 0; i < 2; i++) game.add_object(new Obstacle());
   for (var i = 0; i < 1; i++) game.add_object(new Slowzone());
   for (var i = 0; i < 0; i++) game.add_object(new Portal());
-  for (var i = 0; i < 3; i++) game.add_object(new Sugar());
+  for (var i = 0; i < 3; i++) game.add_object(new Sugar(), true);
+  var nest = new Nest();
+  game.add_object(nest, true);
   for (var i = 0; i < 80; i++) game.add_object(new Ant(nest.x, nest.y, 24));
 
   // boundaries of the map

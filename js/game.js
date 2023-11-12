@@ -28,7 +28,14 @@ class AntGame {
   }
 
   // add an object to the game
-  add_object(obj) {
+  add_object(obj, prevent_collisions = false) {
+    var n = 0;
+    // do not place objects onto each other if prevent_collisions == true
+    while (prevent_collisions && n < 100 && game.objMap.get(obj.x, obj.y).length > 0) {
+      n++;
+      obj.x = window.innerWidth * Math.random();
+      obj.y = window.innerHeight * Math.random();
+    }
     this.objects.push(obj);
     game.objMap.rebuild();
   }
@@ -51,8 +58,8 @@ class AntGame {
   show_stats() {
     var statsbox = document.getElementById("stats");
     var time = (performance.now() - game.stats.start_time) / 1000;
-	  var rate = (game.stats.score/time).toFixed(1);
-	  var score = game.stats.score.toFixed(0);
-	  statsbox.innerHTML = `Total sugar: ${score}<br>Sugar/sec: ${rate}`;
+    var rate = (game.stats.score / time).toFixed(1);
+    var score = game.stats.score.toFixed(0);
+    statsbox.innerHTML = `Total sugar: ${score}<br>Sugar/sec: ${rate}`;
   }
 }
