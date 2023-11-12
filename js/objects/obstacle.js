@@ -14,7 +14,7 @@ class Obstacle extends Obj {
 		if (!ant.colliding) {
 			ant.direction += Math.PI;
 			ant.colliding = true;
-			setTimeout(function () { ant.colliding = false; }, 200);
+			setTimeout(function () { ant.colliding = false; }, 200/game.settings.substeps);
 		}
 	}
 

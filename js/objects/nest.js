@@ -14,7 +14,7 @@ class Nest extends Obj {
 		if (!ant.colliding) {
 			if (ant.cargo == "sugar") ant.deploy_sugar();
 			ant.colliding = true;
-			setTimeout(function () { ant.colliding = false; }, 200);
+			setTimeout(function () { ant.colliding = false; }, 200/game.settings.substeps);
 		}
 	}
 
