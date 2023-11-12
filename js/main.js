@@ -33,7 +33,7 @@ function start_game() {
   setInterval(function () {
     game.step();
   }, 20);
-  setInterval(redraw, 20);
+  setInterval(redraw, 30);
   setInterval(overlay, 100);
   game.stats.start_time = performance.now() / 1000;
 }

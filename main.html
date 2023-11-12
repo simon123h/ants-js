@@ -19,6 +19,9 @@
     <canvas id="frame"></canvas>
     <div id="stats"></div>
     <div id="settings">
+      <button onclick="game.settings.substeps -= 1;" style="margin-right:-5px;">-</button>
+      <button onclick="game.settings.substeps = 1;">Speed</button>
+      <button onclick="game.settings.substeps += 1;" style="margin-left:-5px;margin-right:5px;">+</button>
       <button onclick="game.settings.scent_view = !game.settings.scent_view;">
         Toggle Scent View
       </button>

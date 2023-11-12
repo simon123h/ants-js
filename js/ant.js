@@ -129,6 +129,7 @@ class Ant extends Obj {
 		this.cargo = null;
 		this.score++;
 		game.stats.score++;
+		game.stats.rel_score += 1./game.settings.substeps;
 	}
 }
 

@@ -15,16 +15,21 @@ class AntGame {
     this.objMap = new ObjectMap(15);
     this.settings = {
       scent_view: true,
+      substeps: 1,
     };
     this.stats = {
       score: 0,
+      rel_score: 0,
     };
   }
 
   // do a step for every object in the game
   step() {
-    for (var obj of this.objects) obj.step();
-    for (var a in this.scents) this.scents[a].step();
+    if (this.settings.substeps < 0) this.settings.substeps = 0;
+    for (var i = 0; i < this.settings.substeps; i++) {
+      for (var obj of this.objects) obj.step();
+      for (var a in this.scents) this.scents[a].step();
+    }
   }
 
   // add an object to the game
@@ -58,7 +63,7 @@ class AntGame {
   show_stats() {
     var statsbox = document.getElementById("stats");
     var time = (performance.now() - game.stats.start_time) / 1000;
-    var rate = (game.stats.score / time).toFixed(1);
+    var rate = (game.stats.rel_score / time).toFixed(1);
     var score = game.stats.score.toFixed(0);
     statsbox.innerHTML = `Total sugar: ${score}<br>Sugar/sec: ${rate}`;
   }

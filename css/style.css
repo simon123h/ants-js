@@ -27,6 +27,10 @@
 	padding: 5px;
 }
 
+#settings button {
+	cursor: pointer;
+}
+
 #stats {
 	position: absolute;
 	left: 0px;
