@@ -11,26 +11,23 @@ class Obstacle extends Obj {
 	}
 
 	detect(ant) {
-		if (!ant.colliding) {
+		if (ant.collision_timeout <= 10) {
 			ant.direction += Math.PI;
-			ant.colliding = true;
-			setTimeout(function () { ant.colliding = false; }, 200/game.settings.substeps);
+			ant.collision_timeout = 10;
 		}
 	}
 
 	// called when the obstacle is detected by an ant's probes
 	leftProbeDetect(ant) {
-		if (!ant.colliding) {
+		if (ant.collision_timeout <= 10) {
 			ant.direction += 1;
-			ant.colliding = true;
-			setTimeout(function () { ant.colliding = false; }, 20);
+			ant.collision_timeout = 10;
 		}
 	}
 	rightProbeDetect(ant) {
-		if (!ant.colliding) {
+		if (ant.collision_timeout <= 10) {
 			ant.direction -= 1;
-			ant.colliding = true;
-			setTimeout(function () { ant.colliding = false; }, 20);
+			ant.collision_timeout = 10;
 		}
 	}
 }

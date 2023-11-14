@@ -7,7 +7,7 @@ class Ant extends Obj {
 		this.y = y || window.innerHeight * Math.random(); // y position
 		this.rad = 10; // radius
 		this.speed = 3; // motion speed
-  		this.speed *= 1 + 0.2 * (Math.random() - 0.5);
+		this.speed *= 1 + 0.2 * (Math.random() - 0.5);
 		this.direction = 2 * Math.PI * Math.random(); // motion direction
 		this.cargo = null; // carried load
 		this.idle = true; // is the ant idle?
@@ -15,7 +15,7 @@ class Ant extends Obj {
 		this.image.src = "res/ant.png";
 		this.image.width = 15;
 		this.image.height = 15;
-		this.colliding = false;
+		this.collision_timeout = 0;
 		this.scentStrength = 0;
 		this.score = 0;
 	}
@@ -46,6 +46,8 @@ class Ant extends Obj {
 		if (Math.random() < 0.4)
 			this.nose();
 		this.detectObjects();
+		// decrease collision timeout counter
+		if (this.collision_timeout > 0) this.collision_timeout--;
 	}
 
 	// pick up scents and make movement decisions based on the scents around it
@@ -129,7 +131,7 @@ class Ant extends Obj {
 		this.cargo = null;
 		this.score++;
 		game.stats.score++;
-		game.stats.rel_score += 1./game.settings.substeps;
+		game.stats.rel_score += 1. / game.settings.substeps;
 	}
 }
 
