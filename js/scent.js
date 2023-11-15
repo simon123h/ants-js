@@ -9,10 +9,10 @@ class Scent {
     // initialize memory array
     var xMax = window.innerWidth / this.resolution;
     var yMax = window.innerHeight / this.resolution;
-    for (var i = 0; i < xMax; i++) {
+    for (var i = 0; i <= xMax; i++) {
       this.memory[i] = new Array();
       this.memory2[i] = new Array();
-      for (var j = 0; j < yMax; j++) {
+      for (var j = 0; j <= yMax; j++) {
         this.memory[i][j] = 0;
         this.memory2[i][j] = 0;
       }
