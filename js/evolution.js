@@ -36,8 +36,8 @@ function evolveAnts(strength) {
     b.push(reproduceTopScoreAnt());
   for (var ant of game.ants)
     ant.stats.score = 0;
-  console.log("Inefficient:", a);
-  console.log("Efficient:", b);
+  // console.log("Inefficient:", a);
+  // console.log("Efficient:", b);
   console.log(
     "Evolved " +
     strength +
