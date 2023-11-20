@@ -18,7 +18,7 @@ class Ant extends Obj {
 		this.image.height = 15;
 		this.collision_timeout = 0;
 		this.scentStrength = 0;
-		this.score = 0;
+		this.stats = { score: 0, days_wo_nest: 0 }
 	}
 
 	// make a step forward
@@ -49,6 +49,18 @@ class Ant extends Obj {
 		this.detectObjects();
 		// decrease collision timeout counter
 		if (this.collision_timeout > 0) this.collision_timeout--;
+		// drop sugar if the ant has not seen the nest for too long
+		if (!this.idle)
+			this.stats.days_wo_nest++;
+		else
+			this.stats.days_wo_nest = 0;
+		if (this.stats.days_wo_nest > 10000) {
+			this.idle = true;
+			this.cargo = null;
+			this.image.src = "res/ant.png";
+			this.stats.days_wo_nest = 0;
+			console.log("dropped sugar")
+		}
 	}
 
 	// pick up scents and make movement decisions based on the scents around it
@@ -116,6 +128,7 @@ class Ant extends Obj {
 		this.idle = false;
 		this.cargo = "sugar";
 		sugar.amount--;
+		this.stats.hunger = 0;
 		if (sugar.amount < 1) {
 			game.remove_object(sugar);
 			game.add_object(new Sugar(), true);
@@ -130,9 +143,22 @@ class Ant extends Obj {
 		this.idle = true;
 		this.direction += Math.PI;
 		this.cargo = null;
-		this.score++;
+		this.stats.score++;
 		game.stats.score++;
 		game.stats.rel_score += 1. / game.settings.substeps;
+	}
+
+	// reset the ant and put it in the nest, equvalent to killing it and generating a new ant
+	respawn() {
+		console.log("respawn")
+		var nest = game.get_nest();
+		this.cargo = null;
+		this.idle = true;
+		this.image.src = "res/ant.png";
+		this.x = nest.x;
+		this.y = nest.y;
+		this.stats.score = 0;
+		this.stats.hunger = 0;
 	}
 }
 
