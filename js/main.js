@@ -45,8 +45,7 @@ function redraw() {
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
   context.clearRect(0, 0, canvas.width, canvas.height);
-  for (var obj of game.objects)
-    obj.draw(context);
+  for (var obj of game.objects) obj.draw(context);
   game.show_stats();
 }
 

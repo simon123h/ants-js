@@ -1,4 +1,3 @@
-
 // Class for all objects
 class Obj {
   constructor(x, y) {
@@ -9,27 +8,20 @@ class Obj {
   }
 
   // called at every step during the game loop
-  step() { }
+  step() {}
 
   // called if the object is detected by an ant
-  detect(ant) { }
+  detect(ant) {}
   // called if the object is probed by an ant
-  leftProbeDetect(ant) { }
-  rightProbeDetect(ant) { }
+  leftProbeDetect(ant) {}
+  rightProbeDetect(ant) {}
 
   // draw the object onto the map
   draw(context) {
     context.save();
     context.translate(this.x, this.y);
     context.rotate(this.direction);
-    context.drawImage(
-      this.image,
-      -this.image.width / 2,
-      -this.image.height / 2,
-      this.image.width,
-      this.image.height,
-    );
+    context.drawImage(this.image, -this.image.width / 2, -this.image.height / 2, this.image.width, this.image.height);
     context.restore();
   }
-
 }

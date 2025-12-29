@@ -9,10 +9,7 @@ class ObjectMap {
   get(x, y) {
     x = Math.floor(x / this.resolution);
     y = Math.floor(y / this.resolution);
-    if (
-      typeof this.memory[x] == "undefined" ||
-      typeof this.memory[x][y] == "undefined"
-    ) {
+    if (typeof this.memory[x] == "undefined" || typeof this.memory[x][y] == "undefined") {
       return new Array();
     }
     return this.memory[x][y];
@@ -23,8 +20,7 @@ class ObjectMap {
     x = Math.floor(x / this.resolution);
     y = Math.floor(y / this.resolution);
     if (typeof this.memory[x] == "undefined") this.memory[x] = new Array();
-    if (typeof this.memory[x][y] == "undefined")
-      this.memory[x][y] = new Array();
+    if (typeof this.memory[x][y] == "undefined") this.memory[x][y] = new Array();
     this.memory[x][y].push(obj);
   }
 
@@ -38,10 +34,8 @@ class ObjectMap {
     while (xi < xMax) {
       var yi = Math.floor(y / this.resolution);
       while (yi < yMax) {
-        if (typeof this.memory[xi] == "undefined")
-          this.memory[xi] = new Array();
-        if (typeof this.memory[xi][yi] == "undefined")
-          this.memory[xi][yi] = new Array();
+        if (typeof this.memory[xi] == "undefined") this.memory[xi] = new Array();
+        if (typeof this.memory[xi][yi] == "undefined") this.memory[xi][yi] = new Array();
         this.memory[xi][yi].push(obj);
         yi++;
       }
@@ -54,22 +48,19 @@ class ObjectMap {
     this.memory = new Array();
     for (var obj of game.objects) {
       if (obj.constructor == Ant) continue;
-      this.pushArea(obj.x, obj.y, obj.image.width, obj.image.height, obj,);
+      this.pushArea(obj.x, obj.y, obj.image.width, obj.image.height, obj);
     }
   }
 
   // draw the object map (for debugging purposes)
   draw(context) {
     for (var i = 0; i < this.memory.length; i++) {
-      if (typeof (this.memory[i]) != "undefined")
+      if (typeof this.memory[i] != "undefined")
         for (var j = 0; j < this.memory[i].length; j++) {
-          if (typeof (this.memory[i][j]) != "undefined")
-            context.fillStyle = "#F00";
-          else
-            context.fillStyle = "#FFF";
+          if (typeof this.memory[i][j] != "undefined") context.fillStyle = "#F00";
+          else context.fillStyle = "#FFF";
           context.fillRect(i * this.resolution, j * this.resolution, this.resolution, this.resolution);
         }
     }
   }
-
 }

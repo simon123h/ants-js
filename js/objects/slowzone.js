@@ -6,7 +6,7 @@ class Slowzone extends Obj {
     this.image.src = "res/slowzone.png";
     this.image.width = width || 150;
     this.image.height = height || 150;
-    this.factor = factor
+    this.factor = factor;
   }
 
   detect(ant) {
@@ -16,5 +16,5 @@ class Slowzone extends Obj {
       }, 400);
       ant.speed = ant.default_speed / this.factor;
     }
-  };
-};
+  }
+}
