@@ -1,6 +1,6 @@
-import Obj from "../object.js";
+import GameObject from "../gameobject.js";
 
-export default class Slowzone extends Obj {
+export default class Slowzone extends GameObject {
   constructor(x, y, width, height, factor = 3) {
     super();
     this.x = x || window.innerWidth * Math.random();

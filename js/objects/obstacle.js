@@ -1,7 +1,7 @@
-import Obj from "../object.js";
+import GameObject from "../gameobject.js";
 
 // Class for obstacles
-export default class Obstacle extends Obj {
+export default class Obstacle extends GameObject {
   constructor(x, y, width, height) {
     super();
     this.x = x || window.innerWidth * Math.random();

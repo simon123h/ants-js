@@ -1,5 +1,5 @@
 // Class for all objects
-export default class Obj {
+export default class GameObject {
   constructor(x, y) {
     this.x = x || window.innerWidth * Math.random(); // x position
     this.y = y || window.innerHeight * Math.random(); // y position

@@ -1,10 +1,10 @@
-import Obj from "./object.js";
+import GameObject from "./gameobject.js";
 import { game } from "./game.js";
 import { evolveAnts } from "./evolution.js";
 import Sugar from "./objects/sugar.js";
 
 // Class for ants
-export default class Ant extends Obj {
+export default class Ant extends GameObject {
   constructor(x, y, probeLength) {
     super();
     this.x = x || window.innerWidth * Math.random(); // x position

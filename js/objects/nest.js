@@ -1,7 +1,7 @@
-import Obj from "../object.js";
+import GameObject from "../gameobject.js";
 import { game } from "../game.js";
 
-export default class Nest extends Obj {
+export default class Nest extends GameObject {
   constructor(x, y) {
     super();
     this.x = x || window.innerWidth * Math.random();
