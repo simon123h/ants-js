@@ -1,4 +1,6 @@
-class Slowzone extends Obj {
+import Obj from "../object.js";
+
+export default class Slowzone extends Obj {
   constructor(x, y, width, height, factor = 3) {
     super();
     this.x = x || window.innerWidth * Math.random();

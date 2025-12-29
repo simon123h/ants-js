@@ -1,5 +1,10 @@
+import Obj from "./object.js";
+import { game } from "./game.js";
+import { evolveAnts } from "./evolution.js";
+import Sugar from "./objects/sugar.js";
+
 // Class for ants
-class Ant extends Obj {
+export default class Ant extends Obj {
   constructor(x, y, probeLength) {
     super();
     this.x = x || window.innerWidth * Math.random(); // x position
@@ -154,5 +159,3 @@ class Ant extends Obj {
     this.stats.hunger = 0;
   }
 }
-
-AntCounter = 0;

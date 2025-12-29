@@ -1,5 +1,7 @@
+import Obj from "../object.js";
+
 // Class for obstacles
-class Obstacle extends Obj {
+export default class Obstacle extends Obj {
   constructor(x, y, width, height) {
     super();
     this.x = x || window.innerWidth * Math.random();

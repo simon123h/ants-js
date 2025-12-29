@@ -1,5 +1,5 @@
 // Class for all objects
-class Obj {
+export default class Obj {
   constructor(x, y) {
     this.x = x || window.innerWidth * Math.random(); // x position
     this.y = y || window.innerHeight * Math.random(); // y position

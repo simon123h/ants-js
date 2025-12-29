@@ -1,14 +1,22 @@
+import { game } from "./game.js";
+import Obstacle from "./objects/obstacle.js";
+import Slowzone from "./objects/slowzone.js";
+import Sugar from "./objects/sugar.js";
+import Nest from "./objects/nest.js";
+import Ant from "./ant.js";
+
 // global variable for the current game
-var game = null;
+// var game = null;
+window.game = game;
 
 window.onload = function () {
   // generate a new game
-  game = new AntGame();
+  // game = new AntGame();
   start_game();
   // generate objects in the game
   for (var i = 0; i < 2; i++) game.add_object(new Obstacle());
   for (var i = 0; i < 1; i++) game.add_object(new Slowzone());
-  for (var i = 0; i < 0; i++) game.add_object(new Portal());
+  // for (var i = 0; i < 0; i++) game.add_object(new Portal());
   for (var i = 0; i < 3; i++) game.add_object(new Sugar(), true);
   var nest = new Nest();
   game.add_object(nest, true);
@@ -51,8 +59,8 @@ function redraw() {
 
 // draw the scent overlay
 function overlay() {
-  canvas = document.getElementById("overlay");
-  context = canvas.getContext("2d");
+  var canvas = document.getElementById("overlay");
+  var context = canvas.getContext("2d");
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
   context.clearRect(0, 0, canvas.width, canvas.height);

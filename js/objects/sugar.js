@@ -1,4 +1,7 @@
-class Sugar extends Obj {
+import Obj from "../object.js";
+import { game } from "../game.js";
+
+export default class Sugar extends Obj {
   constructor(x, y) {
     super();
     this.x = x || window.innerWidth * Math.random();

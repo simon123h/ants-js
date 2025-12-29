@@ -1,4 +1,7 @@
-class AntGame {
+import Scent from "./scent.js";
+import ObjectMap from "./objectmap.js";
+
+export class AntGame {
   constructor() {
     // array of objects in the game (including ants)
     this.objects = [];
@@ -36,35 +39,37 @@ class AntGame {
   add_object(obj, prevent_collisions = false) {
     var n = 0;
     // do not place objects onto each other if prevent_collisions == true
-    while (prevent_collisions && n < 100 && game.objMap.get(obj.x, obj.y).length > 0) {
+    while (prevent_collisions && n < 100 && this.objMap.get(obj.x, obj.y).length > 0) {
       n++;
       obj.x = window.innerWidth * Math.random();
       obj.y = window.innerHeight * Math.random();
     }
     this.objects.push(obj);
-    game.objMap.rebuild();
+    this.objMap.rebuild(this.objects);
   }
 
   // remove an object from the game
   remove_object(obj) {
     this.objects.splice(this.objects.indexOf(obj), 1);
-    game.objMap.rebuild();
+    this.objMap.rebuild(this.objects);
   }
 
   // get an ant nest from the objects
   get_nest() {
-    for (var obj of game.objects) if (obj.constructor == Nest) return obj;
+    for (var obj of this.objects) if (obj.constructor.name === "Nest") return obj;
   }
 
   get ants() {
-    return this.objects.filter((o) => o.constructor == Ant);
+    return this.objects.filter((o) => o.constructor.name === "Ant");
   }
 
   show_stats() {
     var statsbox = document.getElementById("stats");
-    var time = (performance.now() - game.stats.start_time) / 1000;
-    var rate = (game.stats.rel_score / time).toFixed(1);
-    var score = game.stats.score.toFixed(0);
+    var time = (performance.now() - this.stats.start_time) / 1000;
+    var rate = (this.stats.rel_score / time).toFixed(1);
+    var score = this.stats.score.toFixed(0);
     statsbox.innerHTML = `Total sugar: ${score}<br>Sugar/sec: ${rate}`;
   }
 }
+
+export const game = new AntGame();

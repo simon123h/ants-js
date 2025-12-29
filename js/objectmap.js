@@ -1,5 +1,5 @@
 // discretized grid for efficient object collision detection
-class ObjectMap {
+export default class ObjectMap {
   constructor(res) {
     this.resolution = res; // resolution of the grid in px
     this.memory = new Array();
@@ -44,10 +44,10 @@ class ObjectMap {
   }
 
   // rebuild the map
-  rebuild() {
+  rebuild(objects) {
     this.memory = new Array();
-    for (var obj of game.objects) {
-      if (obj.constructor == Ant) continue;
+    for (var obj of objects) {
+      if (obj.constructor.name === "Ant") continue;
       this.pushArea(obj.x, obj.y, obj.image.width, obj.image.height, obj);
     }
   }

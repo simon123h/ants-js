@@ -1,5 +1,5 @@
 // Scent emitted by ants
-class Scent {
+export default class Scent {
   constructor(res, color, max) {
     this.resolution = res; // resolution of the grid in px
     this.color = color; // color for visualization

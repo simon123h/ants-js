@@ -1,3 +1,6 @@
+import { game } from "./game.js";
+import Ant from "./ant.js";
+
 // Evolution of ants
 
 function killLowScoreAnt() {
@@ -24,7 +27,7 @@ function reproduceTopScoreAnt() {
   return Math.round(prev);
 }
 
-function evolveAnts(strength) {
+export function evolveAnts(strength) {
   strength = strength || 1;
   var a = [];
   var b = [];
