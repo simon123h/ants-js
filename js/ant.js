@@ -68,25 +68,22 @@ export default class Ant extends GameObject {
   // pick up scents and make movement decisions based on the scents around it
   nose() {
     const range = this.probeLength;
-    // unit vector parallel to the movement direction
-    const e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) };
-    // unit vector normal to the movement direction
-    const e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
-    const leftProbe = {
-      x: this.x + range * (2 * e_p.x + e_n.x),
-      y: this.y + range * (2 * e_p.y + e_n.y),
-    };
-    const rightProbe = {
-      x: this.x + range * (2 * e_p.x - e_n.x),
-      y: this.y + range * (2 * e_p.y - e_n.y),
-    };
-    let leftVal = 0;
-    let rightVal = 0;
-    leftVal = game.scents.ant.get(leftProbe.x, leftProbe.y);
-    rightVal = game.scents.ant.get(rightProbe.x, rightProbe.y);
+    // compute direction basis components (floats) to avoid temporary objects
+    const cosD = Math.cos(this.direction);
+    const sinD = Math.sin(this.direction);
+    const epX = cosD;
+    const epY = sinD;
+    const enX = sinD;
+    const enY = -cosD;
+    const leftX = this.x + range * (2 * epX + enX);
+    const leftY = this.y + range * (2 * epY + enY);
+    const rightX = this.x + range * (2 * epX - enX);
+    const rightY = this.y + range * (2 * epY - enY);
+    let leftVal = game.scents.ant.get(leftX, leftY);
+    let rightVal = game.scents.ant.get(rightX, rightY);
     const aim = this.cargo == "sugar" ? "nest" : "sugar";
-    leftVal += game.scents[aim].get(leftProbe.x, leftProbe.y);
-    rightVal += game.scents[aim].get(rightProbe.x, rightProbe.y);
+    leftVal += game.scents[aim].get(leftX, leftY);
+    rightVal += game.scents[aim].get(rightX, rightY);
     if (leftVal > rightVal) this.direction -= Math.random() * 0.5;
     else if (leftVal < rightVal) this.direction += Math.random() * 0.5;
   }
@@ -104,20 +101,19 @@ export default class Ant extends GameObject {
     for (const obj of game.objMap.get(this.x, this.y)) obj.detect(this);
     // objects at the probes
     const range = this.probeLength * 0.3;
-    // unit vector parallel to the movement direction
-    const e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) };
-    // unit vector normal to the movement direction
-    const e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
-    const leftProbe = {
-      x: this.x + range * (2 * e_p.x + e_n.x),
-      y: this.y + range * (2 * e_p.y + e_n.y),
-    };
-    const rightProbe = {
-      x: this.x + range * (2 * e_p.x - e_n.x),
-      y: this.y + range * (2 * e_p.y - e_n.y),
-    };
-    for (const obj of game.objMap.get(leftProbe.x, leftProbe.y)) obj.leftProbeDetect(this);
-    for (const obj of game.objMap.get(rightProbe.x, rightProbe.y)) obj.rightProbeDetect(this);
+    // compute probe coordinates with float locals to avoid garbage
+    const cosD = Math.cos(this.direction);
+    const sinD = Math.sin(this.direction);
+    const epX = cosD;
+    const epY = sinD;
+    const enX = sinD;
+    const enY = -cosD;
+    const leftX = this.x + range * (2 * epX + enX);
+    const leftY = this.y + range * (2 * epY + enY);
+    const rightX = this.x + range * (2 * epX - enX);
+    const rightY = this.y + range * (2 * epY - enY);
+    for (const obj of game.objMap.get(leftX, leftY)) obj.leftProbeDetect(this);
+    for (const obj of game.objMap.get(rightX, rightY)) obj.rightProbeDetect(this);
   }
 
   // carry some sugar
