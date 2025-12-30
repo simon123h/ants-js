@@ -42,6 +42,23 @@ function start_game() {
     game.step();
   }, 20);
 
+  // resize canvases on window resize only
+  const resizeCanvases = () => {
+    const canvas = document.getElementById("frame");
+    const overlayCanvas = document.getElementById("overlay");
+    if (canvas) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    if (overlayCanvas) {
+      overlayCanvas.width = window.innerWidth;
+      overlayCanvas.height = window.innerHeight;
+    }
+  };
+  window.addEventListener('resize', resizeCanvases);
+  // set initial sizes once
+  resizeCanvases();
+
   // Use requestAnimationFrame for drawing at the browser's repaint frequency.
   let drawRAF;
   const drawLoop = () => {
@@ -58,9 +75,8 @@ function start_game() {
 function redraw() {
   const canvas = document.getElementById("frame");
   const context = canvas.getContext("2d");
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  // canvas dimensions are managed on resize; just clear using current size
+  context.clearRect(0, 0, canvas.width || window.innerWidth, canvas.height || window.innerHeight);
   for (const obj of game.objects) obj.draw(context);
   game.show_stats();
 }
@@ -69,9 +85,8 @@ function redraw() {
 function overlay() {
   const canvas = document.getElementById("overlay");
   const context = canvas.getContext("2d");
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  // canvas dimensions are managed on resize; just clear using current size
+  context.clearRect(0, 0, canvas.width || window.innerWidth, canvas.height || window.innerHeight);
   if (!game.settings.scent_view) return;
   for (const a in game.scents) game.scents[a].draw(context);
 
