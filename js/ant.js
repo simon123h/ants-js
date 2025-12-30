@@ -66,24 +66,24 @@ export default class Ant extends GameObject {
 
   // pick up scents and make movement decisions based on the scents around it
   nose() {
-    var range = this.probeLength;
+    const range = this.probeLength;
     // unit vector parallel to the movement direction
-    var e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) };
+    const e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) };
     // unit vector normal to the movement direction
-    var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
-    var leftProbe = {
+    const e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
+    const leftProbe = {
       x: this.x + range * (2 * e_p.x + e_n.x),
       y: this.y + range * (2 * e_p.y + e_n.y),
     };
-    var rightProbe = {
+    const rightProbe = {
       x: this.x + range * (2 * e_p.x - e_n.x),
       y: this.y + range * (2 * e_p.y - e_n.y),
     };
-    var leftVal = 0;
-    var rightVal = 0;
+    let leftVal = 0;
+    let rightVal = 0;
     leftVal = game.scents.ant.get(leftProbe.x, leftProbe.y);
     rightVal = game.scents.ant.get(rightProbe.x, rightProbe.y);
-    var aim = this.cargo == "sugar" ? "nest" : "sugar";
+    const aim = this.cargo == "sugar" ? "nest" : "sugar";
     leftVal += game.scents[aim].get(leftProbe.x, leftProbe.y);
     rightVal += game.scents[aim].get(rightProbe.x, rightProbe.y);
     if (leftVal > rightVal) this.direction -= Math.random() * 0.5;
@@ -100,23 +100,23 @@ export default class Ant extends GameObject {
   // search for objects in the current location and possibly interact
   detectObjects() {
     // objects at the current location
-    for (var obj of game.objMap.get(this.x, this.y)) obj.detect(this);
+    for (const obj of game.objMap.get(this.x, this.y)) obj.detect(this);
     // objects at the probes
-    var range = this.probeLength * 0.3;
+    const range = this.probeLength * 0.3;
     // unit vector parallel to the movement direction
-    var e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) };
+    const e_p = { x: Math.cos(this.direction), y: Math.sin(this.direction) };
     // unit vector normal to the movement direction
-    var e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
-    var leftProbe = {
+    const e_n = { x: Math.sin(this.direction), y: -Math.cos(this.direction) };
+    const leftProbe = {
       x: this.x + range * (2 * e_p.x + e_n.x),
       y: this.y + range * (2 * e_p.y + e_n.y),
     };
-    var rightProbe = {
+    const rightProbe = {
       x: this.x + range * (2 * e_p.x - e_n.x),
       y: this.y + range * (2 * e_p.y - e_n.y),
     };
-    for (var obj of game.objMap.get(leftProbe.x, leftProbe.y)) obj.leftProbeDetect(this);
-    for (var obj of game.objMap.get(rightProbe.x, rightProbe.y)) obj.rightProbeDetect(this);
+    for (const obj of game.objMap.get(leftProbe.x, leftProbe.y)) obj.leftProbeDetect(this);
+    for (const obj of game.objMap.get(rightProbe.x, rightProbe.y)) obj.rightProbeDetect(this);
   }
 
   // carry some sugar
@@ -149,7 +149,7 @@ export default class Ant extends GameObject {
   // reset the ant and put it in the nest, equvalent to killing it and generating a new ant
   respawn() {
     console.log("respawn");
-    var nest = game.get_nest();
+    const nest = game.get_nest();
     this.cargo = null;
     this.idle = true;
     this.image.src = "res/ant.png";

@@ -29,15 +29,15 @@ export class AntGame {
   // do a step for every object in the game
   step() {
     if (this.settings.substeps < 0) this.settings.substeps = 0;
-    for (var i = 0; i < this.settings.substeps; i++) {
-      for (var obj of this.objects) obj.step();
-      for (var a in this.scents) this.scents[a].step();
+    for (let i = 0; i < this.settings.substeps; i++) {
+      for (const obj of this.objects) obj.step();
+      for (const a in this.scents) this.scents[a].step();
     }
   }
 
   // add an object to the game
   add_object(obj, prevent_collisions = false) {
-    var n = 0;
+    let n = 0;
     // do not place objects onto each other if prevent_collisions == true
     while (prevent_collisions && n < 100 && this.objMap.get(obj.x, obj.y).length > 0) {
       n++;
@@ -56,7 +56,7 @@ export class AntGame {
 
   // get an ant nest from the objects
   get_nest() {
-    for (var obj of this.objects) if (obj.constructor.name === "Nest") return obj;
+    for (const obj of this.objects) if (obj.constructor.name === "Nest") return obj;
   }
 
   get ants() {
@@ -64,10 +64,10 @@ export class AntGame {
   }
 
   show_stats() {
-    var statsbox = document.getElementById("stats");
-    var time = (performance.now() - this.stats.start_time) / 1000;
-    var rate = (this.stats.rel_score / time).toFixed(1);
-    var score = this.stats.score.toFixed(0);
+    const statsbox = document.getElementById("stats");
+    const time = (performance.now() - this.stats.start_time) / 1000;
+    const rate = (this.stats.rel_score / time).toFixed(1);
+    const score = this.stats.score.toFixed(0);
     statsbox.innerHTML = `Total sugar: ${score}<br>Sugar/sec: ${rate}`;
   }
 }

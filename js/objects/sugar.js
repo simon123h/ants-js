@@ -27,7 +27,7 @@ export default class Sugar extends GameObject {
   draw(context) {
     super.draw(context);
     context.fillStyle = "#888";
-    var perc = ((this.amount / this.max) * 100).toFixed(0);
+    const perc = ((this.amount / this.max) * 100).toFixed(0);
     context.font = "10px sans-serif";
     context.textAlign = "center";
     context.fillText(`${perc}%`, this.x, this.y - 26);

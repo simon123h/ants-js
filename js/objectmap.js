@@ -28,11 +28,11 @@ export default class ObjectMap {
   pushArea(x, y, width, height, obj) {
     x -= width / 2 - 3;
     y -= height / 2 - 3;
-    var xi = Math.floor(x / this.resolution);
-    var xMax = Math.floor((x + width) / this.resolution);
-    var yMax = Math.floor((y + height) / this.resolution);
+    let xi = Math.floor(x / this.resolution);
+    const xMax = Math.floor((x + width) / this.resolution);
+    const yMax = Math.floor((y + height) / this.resolution);
     while (xi < xMax) {
-      var yi = Math.floor(y / this.resolution);
+      let yi = Math.floor(y / this.resolution);
       while (yi < yMax) {
         if (typeof this.memory[xi] == "undefined") this.memory[xi] = new Array();
         if (typeof this.memory[xi][yi] == "undefined") this.memory[xi][yi] = new Array();
@@ -46,7 +46,7 @@ export default class ObjectMap {
   // rebuild the map
   rebuild(objects) {
     this.memory = new Array();
-    for (var obj of objects) {
+    for (const obj of objects) {
       if (obj.constructor.name === "Ant") continue;
       this.pushArea(obj.x, obj.y, obj.image.width, obj.image.height, obj);
     }
@@ -54,9 +54,9 @@ export default class ObjectMap {
 
   // draw the object map (for debugging purposes)
   draw(context) {
-    for (var i = 0; i < this.memory.length; i++) {
+    for (let i = 0; i < this.memory.length; i++) {
       if (typeof this.memory[i] != "undefined")
-        for (var j = 0; j < this.memory[i].length; j++) {
+        for (let j = 0; j < this.memory[i].length; j++) {
           if (typeof this.memory[i][j] != "undefined") context.fillStyle = "#F00";
           else context.fillStyle = "#FFF";
           context.fillRect(i * this.resolution, j * this.resolution, this.resolution, this.resolution);

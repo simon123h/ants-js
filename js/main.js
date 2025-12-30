@@ -14,13 +14,13 @@ window.onload = function () {
   // game = new AntGame();
   start_game();
   // generate objects in the game
-  for (var i = 0; i < 2; i++) game.add_object(new Obstacle());
-  for (var i = 0; i < 1; i++) game.add_object(new Slowzone());
-  // for (var i = 0; i < 0; i++) game.add_object(new Portal());
-  for (var i = 0; i < 3; i++) game.add_object(new Sugar(), true);
-  var nest = new Nest();
+  for (let i = 0; i < 2; i++) game.add_object(new Obstacle());
+  for (let i = 0; i < 1; i++) game.add_object(new Slowzone());
+  // for (let i = 0; i < 0; i++) game.add_object(new Portal());
+  for (let i = 0; i < 3; i++) game.add_object(new Sugar(), true);
+  const nest = new Nest();
   game.add_object(nest, true);
-  for (var i = 0; i < 80; i++) game.add_object(new Ant(nest.x, nest.y, 24));
+  for (let i = 0; i < 80; i++) game.add_object(new Ant(nest.x, nest.y, 24));
 
   // boundaries of the map
   // game.add_object(new Obstacle(-25, window.innerHeight/2-25, 50, window.innerHeight+50));
@@ -30,8 +30,8 @@ window.onload = function () {
 
   // add new scent by clicking
   document.getElementById("frame").onclick = function (e) {
-    var x = e.pageX;
-    var y = e.pageY;
+    const x = e.pageX;
+    const y = e.pageY;
     game.scents.ant.push(x, y, 100);
   };
 };
@@ -48,24 +48,24 @@ function start_game() {
 
 // draw all objects in the game
 function redraw() {
-  var canvas = document.getElementById("frame");
-  var context = canvas.getContext("2d");
+  const canvas = document.getElementById("frame");
+  const context = canvas.getContext("2d");
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
   context.clearRect(0, 0, canvas.width, canvas.height);
-  for (var obj of game.objects) obj.draw(context);
+  for (const obj of game.objects) obj.draw(context);
   game.show_stats();
 }
 
 // draw the scent overlay
 function overlay() {
-  var canvas = document.getElementById("overlay");
-  var context = canvas.getContext("2d");
+  const canvas = document.getElementById("overlay");
+  const context = canvas.getContext("2d");
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
   context.clearRect(0, 0, canvas.width, canvas.height);
   if (!game.settings.scent_view) return;
-  for (var a in game.scents) game.scents[a].draw(context);
+  for (const a in game.scents) game.scents[a].draw(context);
 
   // draw the ObjectMap (for debugging)
   // game.objMap.draw(context);
