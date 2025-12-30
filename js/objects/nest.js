@@ -1,14 +1,15 @@
 import GameObject from "../gameobject.js";
 import { game } from "../game.js";
+import Resources from "../resources.js";
 
 export default class Nest extends GameObject {
   constructor(x, y) {
     super();
     this.x = x || window.innerWidth * Math.random();
     this.y = y || window.innerHeight * Math.random();
-    this.image.src = "res/nest.png";
-    this.image.width = 120;
-    this.image.height = 120;
+    this.image = Resources.get('nest');
+    this.width = 120;
+    this.height = 120;
     this.scentStrength = 2;
   }
 

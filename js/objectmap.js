@@ -48,7 +48,7 @@ export default class ObjectMap {
     this.memory = new Array();
     for (const obj of objects) {
       if (obj.constructor.name === "Ant") continue;
-      this.pushArea(obj.x, obj.y, obj.image.width, obj.image.height, obj);
+      this.pushArea(obj.x, obj.y, obj.width || obj.image.width, obj.height || obj.image.height, obj);
     }
   }
 

@@ -2,6 +2,7 @@ import GameObject from "./gameobject.js";
 import { game } from "./game.js";
 import { evolveAnts } from "./evolution.js";
 import Sugar from "./objects/sugar.js";
+import Resources from "./resources.js";
 
 // Class for ants
 export default class Ant extends GameObject {
@@ -17,9 +18,9 @@ export default class Ant extends GameObject {
     this.cargo = null; // carried load
     this.idle = true; // is the ant idle?
     this.probeLength = probeLength || 24; // length of the probes
-    this.image.src = "res/ant.png";
-    this.image.width = 15;
-    this.image.height = 15;
+    this.image = Resources.get('ant');
+    this.width = 15;
+    this.height = 15;
     this.collision_timeout = 0;
     this.scentStrength = 0;
     this.stats = { score: 0, days_wo_nest: 0 };
@@ -121,7 +122,7 @@ export default class Ant extends GameObject {
 
   // carry some sugar
   take_sugar(sugar) {
-    this.image.src = "res/antWithSugar.png";
+    this.image = Resources.get('antWithSugar');
     this.direction += Math.PI;
     this.idle = false;
     this.cargo = "sugar";
@@ -137,7 +138,7 @@ export default class Ant extends GameObject {
   // deploy sugar at nest
   deploy_sugar() {
     if (this.cargo != "sugar") return;
-    this.image.src = "res/ant.png";
+    this.image = Resources.get('ant');
     this.idle = true;
     this.direction += Math.PI;
     this.cargo = null;
@@ -152,7 +153,7 @@ export default class Ant extends GameObject {
     const nest = game.get_nest();
     this.cargo = null;
     this.idle = true;
-    this.image.src = "res/ant.png";
+    this.image = Resources.get('ant');
     this.x = nest.x;
     this.y = nest.y;
     this.stats.score = 0;

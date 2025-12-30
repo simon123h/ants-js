@@ -1,13 +1,14 @@
 import GameObject from "../gameobject.js";
+import Resources from "../resources.js";
 
 export default class Slowzone extends GameObject {
   constructor(x, y, width, height, factor = 3) {
     super();
     this.x = x || window.innerWidth * Math.random();
     this.y = y || window.innerHeight * Math.random();
-    this.image.src = "res/slowzone.png";
-    this.image.width = width || 150;
-    this.image.height = height || 150;
+    this.image = Resources.get('slowzone');
+    this.width = width || 150;
+    this.height = height || 150;
     this.factor = factor;
   }
 

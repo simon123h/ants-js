@@ -1,14 +1,15 @@
 import GameObject from "../gameobject.js";
 import { game } from "../game.js";
+import Resources from "../resources.js";
 
 export default class Sugar extends GameObject {
   constructor(x, y) {
     super();
     this.x = x || window.innerWidth * Math.random();
     this.y = y || window.innerHeight * Math.random();
-    this.image.src = "res/sugar.png";
-    this.image.width = 35;
-    this.image.height = 35;
+    this.image = Resources.get('sugar');
+    this.width = 35;
+    this.height = 35;
     this.max = 250;
     this.amount = this.max;
     this.scentStrength = 10;

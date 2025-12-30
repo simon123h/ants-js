@@ -1,4 +1,5 @@
 import GameObject from "../gameobject.js";
+import Resources from "../resources.js";
 
 // Class for obstacles
 export default class Obstacle extends GameObject {
@@ -6,9 +7,9 @@ export default class Obstacle extends GameObject {
     super();
     this.x = x || window.innerWidth * Math.random();
     this.y = y || window.innerHeight * Math.random();
-    this.image.src = "res/obstacle.png";
-    this.image.width = width || 90;
-    this.image.height = height || 500;
+    this.image = Resources.get('obstacle');
+    this.width = width || 90;
+    this.height = height || 500;
   }
 
   detect(ant) {
