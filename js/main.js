@@ -41,8 +41,16 @@ function start_game() {
   setInterval(function () {
     game.step();
   }, 20);
-  setInterval(redraw, 30);
-  setInterval(overlay, 100);
+
+  // Use requestAnimationFrame for drawing at the browser's repaint frequency.
+  let drawRAF;
+  const drawLoop = () => {
+    redraw();
+    overlay();
+    drawRAF = requestAnimationFrame(drawLoop);
+  };
+  drawRAF = requestAnimationFrame(drawLoop);
+
   game.stats.start_time = performance.now() / 1000;
 }
 
