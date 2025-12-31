@@ -23,8 +23,8 @@ describe("Game Objects", () => {
     const obstacle = new Obstacle(200, 200, 50, 50);
     expect(obstacle.x).toBe(200);
     expect(obstacle.y).toBe(200);
-    expect(obstacle.image.width).toBe(50);
-    expect(obstacle.image.height).toBe(50);
+    expect(obstacle.width).toBe(50);
+    expect(obstacle.height).toBe(50);
   });
 
   it("Slowzone should initialize correctly", () => {
