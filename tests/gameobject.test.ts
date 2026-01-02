@@ -18,4 +18,26 @@ describe("GameObject", () => {
     const obj = new GameObject(10, 10);
     expect(obj.direction).toBe(0);
   });
+
+  it("should respond to method calls without error", () => {
+    const obj = new GameObject(10, 10);
+    expect(() => obj.step()).not.toThrow();
+    expect(() => obj.detect({})).not.toThrow();
+    expect(() => obj.leftProbeDetect({})).not.toThrow();
+    expect(() => obj.rightProbeDetect({})).not.toThrow();
+  });
+
+  it("should draw itself onto the canvas context", () => {
+    const obj = new GameObject(10, 10);
+    // Mock canvas context
+    const context = {
+      save: () => {},
+      translate: () => {},
+      rotate: () => {},
+      drawImage: () => {},
+      restore: () => {},
+    } as unknown as CanvasRenderingContext2D;
+
+    expect(() => obj.draw(context)).not.toThrow();
+  });
 });

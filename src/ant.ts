@@ -62,8 +62,12 @@ export default class Ant extends GameObject {
       this.direction = 2 * Math.PI * Math.random();
     }
     // TODO: do not make this random-based for performance reasons
-    if (Math.random() < 0.25) this.emitAntScent();
-    if (Math.random() < 0.4) this.nose();
+    if (Math.random() < 0.25) {
+      this.emitAntScent();
+    }
+    if (Math.random() < 0.4) {
+      this.nose();
+    }
     this.detectObjects();
     // decrease collision timeout counter
     if (this.collision_timeout > 0) this.collision_timeout--;
@@ -105,8 +109,12 @@ export default class Ant extends GameObject {
   // emit ant scent
   emitAntScent(): void {
     game.scents.ant.push(this.x, this.y, this.scentStrength);
-    if (this.cargo == "sugar") game.scents.sugar.push(this.x, this.y, 3);
-    if (this.idle == true) game.scents.nest.push(this.x, this.y, 1);
+    if (this.cargo == "sugar") {
+      game.scents.sugar.push(this.x, this.y, 3);
+    }
+    if (this.idle == true) {
+      game.scents.nest.push(this.x, this.y, 1);
+    }
   }
 
   // search for objects in the current location and possibly interact
