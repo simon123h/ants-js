@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import Ant from "../src/ant.ts";
+import { describe, it, expect } from "vitest";
+import Ant from "../src/ant";
 
 describe("Ant", () => {
   it("should initialize with correct default values", () => {

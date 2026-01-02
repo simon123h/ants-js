@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import Scent from "../src/scent.ts";
+import Scent from "../src/scent";
 
 describe("Scent", () => {
   it("should initialize with correct parameters", () => {

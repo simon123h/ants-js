@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import Nest from "../src/objects/nest.ts";
-import Sugar from "../src/objects/sugar.ts";
-import Obstacle from "../src/objects/obstacle.ts";
-import Slowzone from "../src/objects/slowzone.ts";
+import Nest from "../src/objects/nest";
+import Sugar from "../src/objects/sugar";
+import Obstacle from "../src/objects/obstacle";
+import Slowzone from "../src/objects/slowzone";
 
 describe("Game Objects", () => {
   it("Nest should initialize correctly", () => {
