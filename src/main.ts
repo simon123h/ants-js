@@ -1,13 +1,13 @@
-import { game } from "./game.js";
-import Obstacle from "./objects/obstacle.js";
-import Slowzone from "./objects/slowzone.js";
-import Sugar from "./objects/sugar.js";
-import Nest from "./objects/nest.js";
-import Ant from "./ant.js";
+import { game } from "./game";
+import Obstacle from "./objects/obstacle";
+import Slowzone from "./objects/slowzone";
+import Sugar from "./objects/sugar";
+import Nest from "./objects/nest";
+import Ant from "./ant";
 
 // global variable for the current game
 // var game = null;
-window.game = game;
+(window as any).game = game;
 
 window.onload = function () {
   // generate a new game
@@ -29,11 +29,14 @@ window.onload = function () {
   // game.add_object(new Obstacle(window.innerWidth/2-25, window.innerHeight+25, window.innerWidth+60, 50));
 
   // add new scent by clicking
-  document.getElementById("frame").onclick = function (e) {
-    const x = e.pageX;
-    const y = e.pageY;
-    game.scents.ant.push(x, y, 100);
-  };
+  const frame = document.getElementById("frame");
+  if (frame) {
+    frame.onclick = function (e: MouseEvent) {
+      const x = e.pageX;
+      const y = e.pageY;
+      game.scents.ant.push(x, y, 100);
+    };
+  }
 };
 
 // start the game and visualization loops
@@ -44,8 +47,8 @@ function start_game() {
 
   // resize canvases on window resize only
   const resizeCanvases = () => {
-    const canvas = document.getElementById("frame");
-    const overlayCanvas = document.getElementById("overlay");
+    const canvas = document.getElementById("frame") as HTMLCanvasElement;
+    const overlayCanvas = document.getElementById("overlay") as HTMLCanvasElement;
     if (canvas) {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -55,26 +58,30 @@ function start_game() {
       overlayCanvas.height = window.innerHeight;
     }
   };
-  window.addEventListener('resize', resizeCanvases);
+  window.addEventListener("resize", resizeCanvases);
   // set initial sizes once
   resizeCanvases();
 
   // Use requestAnimationFrame for drawing at the browser's repaint frequency.
-  let drawRAF;
   const drawLoop = () => {
     redraw();
     overlay();
-    drawRAF = requestAnimationFrame(drawLoop);
+    requestAnimationFrame(drawLoop);
   };
-  drawRAF = requestAnimationFrame(drawLoop);
+  requestAnimationFrame(drawLoop);
 
-  game.stats.start_time = performance.now() / 1000;
+  if (game.stats.start_time === undefined) {
+    game.stats.start_time = performance.now() / 1000;
+  }
 }
 
 // draw all objects in the game
 function redraw() {
-  const canvas = document.getElementById("frame");
+  const canvas = document.getElementById("frame") as HTMLCanvasElement;
+  if (!canvas) return;
   const context = canvas.getContext("2d");
+  if (!context) return;
+
   // canvas dimensions are managed on resize; just clear using current size
   context.clearRect(0, 0, canvas.width || window.innerWidth, canvas.height || window.innerHeight);
   for (const obj of game.objects) obj.draw(context);
@@ -83,8 +90,11 @@ function redraw() {
 
 // draw the scent overlay
 function overlay() {
-  const canvas = document.getElementById("overlay");
+  const canvas = document.getElementById("overlay") as HTMLCanvasElement;
+  if (!canvas) return;
   const context = canvas.getContext("2d");
+  if (!context) return;
+
   // canvas dimensions are managed on resize; just clear using current size
   context.clearRect(0, 0, canvas.width || window.innerWidth, canvas.height || window.innerHeight);
   if (!game.settings.scent_view) return;

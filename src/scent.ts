@@ -1,6 +1,14 @@
 // Scent emitted by ants (optimized: flat typed arrays)
 export default class Scent {
-  constructor(res, color, max) {
+  resolution: number;
+  color: string;
+  max: number;
+  gridW: number;
+  gridH: number;
+  data: Float32Array;
+  temp: Float32Array;
+
+  constructor(res: number, color: string, max: number) {
     this.resolution = res; // resolution of the grid in px
     this.color = color; // color for visualization
     this.max = max; // max value for visualization
@@ -14,7 +22,7 @@ export default class Scent {
   }
 
   // helper: convert pixel coords -> grid index, returns -1 if out of bounds
-  idxFromXY(x, y) {
+  idxFromXY(x: number, y: number): number {
     const gx = Math.floor(x / this.resolution);
     const gy = Math.floor(y / this.resolution);
     if (gx < 0 || gy < 0 || gx >= this.gridW || gy >= this.gridH) return -1;
@@ -22,14 +30,14 @@ export default class Scent {
   }
 
   // obtain value of scent at a position (x, y)
-  get(x, y) {
+  get(x: number, y: number): number {
     const idx = this.idxFromXY(x, y);
     if (idx < 0) return 0;
     return this.data[idx];
   }
 
   // increase the value of the scent at a position (x, y)
-  push(x, y, value) {
+  push(x: number, y: number, value: number): void {
     const gx = Math.floor(x / this.resolution);
     const gy = Math.floor(y / this.resolution);
     if (gx < 0 || gy < 0 || gx >= this.gridW || gy >= this.gridH) return;
@@ -50,7 +58,7 @@ export default class Scent {
   }
 
   // every step of game loop: diffuse and decay scent intensity
-  step() {
+  step(): void {
     const w = this.gridW;
     const h = this.gridH;
     const data = this.data;
@@ -83,7 +91,7 @@ export default class Scent {
   }
 
   // visualize the scent
-  draw(context) {
+  draw(context: CanvasRenderingContext2D): void {
     context.fillStyle = this.color;
     const w = this.gridW;
     const res = this.resolution;

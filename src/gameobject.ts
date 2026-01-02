@@ -1,27 +1,34 @@
 // Class for all objects
-import Resources from './resources.js';
+import Resources from "./resources";
 
 export default class GameObject {
-  constructor(x, y) {
-    this.x = x || window.innerWidth * Math.random(); // x position
-    this.y = y || window.innerHeight * Math.random(); // y position
+  x: number;
+  y: number;
+  direction: number;
+  image: HTMLImageElement;
+  width: number;
+  height: number;
+
+  constructor(x?: number, y?: number) {
+    this.x = x ?? window.innerWidth * Math.random(); // x position
+    this.y = y ?? window.innerHeight * Math.random(); // y position
     this.direction = 0; // orientation (rad)
-    this.image = Resources.get('default');
+    this.image = Resources.get("default");
     this.width = 0;
     this.height = 0;
   }
 
   // called at every step during the game loop
-  step() {}
+  step(): void {}
 
   // called if the object is detected by an ant
-  detect(ant) {}
+  detect(_ant: any): void {}
   // called if the object is probed by an ant
-  leftProbeDetect(ant) {}
-  rightProbeDetect(ant) {}
+  leftProbeDetect(_ant: any): void {}
+  rightProbeDetect(_ant: any): void {}
 
   // draw the object onto the map
-  draw(context) {
+  draw(context: CanvasRenderingContext2D): void {
     const w = this.width || this.image.width;
     const h = this.height || this.image.height;
     context.save();

@@ -1,7 +1,28 @@
-import Scent from "./scent.js";
-import ObjectMap from "./objectmap.js";
+import Scent from "./scent";
+import ObjectMap from "./objectmap";
+import GameObject from "./gameobject";
+import Ant from "./ant";
 
 export class AntGame {
+  objects: GameObject[];
+  scents: {
+    ant: Scent;
+    nest: Scent;
+    sugar: Scent;
+    [key: string]: Scent;
+  };
+  game_intvl: any; // Type for interval ID or null
+  objMap: ObjectMap;
+  settings: {
+    scent_view: boolean;
+    substeps: number;
+  };
+  stats: {
+    score: number;
+    rel_score: number;
+    start_time?: number;
+  };
+
   constructor() {
     // array of objects in the game (including ants)
     this.objects = [];
@@ -27,7 +48,7 @@ export class AntGame {
   }
 
   // do a step for every object in the game
-  step() {
+  step(): void {
     if (this.settings.substeps < 0) this.settings.substeps = 0;
     for (let i = 0; i < this.settings.substeps; i++) {
       for (const obj of this.objects) obj.step();
@@ -36,7 +57,7 @@ export class AntGame {
   }
 
   // add an object to the game
-  add_object(obj, prevent_collisions = false) {
+  add_object(obj: GameObject, prevent_collisions: boolean = false): void {
     let n = 0;
     // do not place objects onto each other if prevent_collisions == true
     while (prevent_collisions && n < 100 && this.objMap.get(obj.x, obj.y).length > 0) {
@@ -49,22 +70,27 @@ export class AntGame {
   }
 
   // remove an object from the game
-  remove_object(obj) {
-    this.objects.splice(this.objects.indexOf(obj), 1);
-    this.objMap.rebuild(this.objects);
+  remove_object(obj: GameObject): void {
+    const idx = this.objects.indexOf(obj);
+    if (idx !== -1) {
+      this.objects.splice(idx, 1);
+      this.objMap.rebuild(this.objects);
+    }
   }
 
   // get an ant nest from the objects
-  get_nest() {
+  get_nest(): GameObject | undefined {
     for (const obj of this.objects) if (obj.constructor.name === "Nest") return obj;
+    return undefined;
   }
 
-  get ants() {
-    return this.objects.filter((o) => o.constructor.name === "Ant");
+  get ants(): Ant[] {
+    return this.objects.filter((o) => o.constructor.name === "Ant") as Ant[];
   }
 
-  show_stats() {
+  show_stats(): void {
     const statsbox = document.getElementById("stats");
+    if (!statsbox || !this.stats.start_time) return;
     const time = (performance.now() - this.stats.start_time) / 1000;
     const rate = (this.stats.rel_score / time).toFixed(1);
     const score = this.stats.score.toFixed(0);

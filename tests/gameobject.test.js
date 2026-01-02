@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import GameObject from "../js/gameobject.js";
+import GameObject from "../src/gameobject.ts";
 
 describe("GameObject", () => {
   it("should initialize with given coordinates", () => {

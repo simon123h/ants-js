@@ -1,18 +1,18 @@
-import GameObject from "../gameobject.js";
-import Resources from "../resources.js";
+import GameObject from "../gameobject";
+import Resources from "../resources";
 
 // Class for obstacles
 export default class Obstacle extends GameObject {
-  constructor(x, y, width, height) {
+  constructor(x?: number, y?: number, width?: number, height?: number) {
     super();
     this.x = x || window.innerWidth * Math.random();
     this.y = y || window.innerHeight * Math.random();
-    this.image = Resources.get('obstacle');
+    this.image = Resources.get("obstacle");
     this.width = width || 90;
     this.height = height || 500;
   }
 
-  detect(ant) {
+  detect(ant: any): void {
     if (ant.collision_timeout <= 10) {
       ant.direction += Math.PI;
       ant.collision_timeout = 10;
@@ -20,13 +20,13 @@ export default class Obstacle extends GameObject {
   }
 
   // called when the obstacle is detected by an ant's probes
-  leftProbeDetect(ant) {
+  leftProbeDetect(ant: any): void {
     if (ant.collision_timeout <= 10) {
       ant.direction += 1;
       ant.collision_timeout = 10;
     }
   }
-  rightProbeDetect(ant) {
+  rightProbeDetect(ant: any): void {
     if (ant.collision_timeout <= 10) {
       ant.direction -= 1;
       ant.collision_timeout = 10;

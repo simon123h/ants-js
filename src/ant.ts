@@ -1,12 +1,26 @@
-import GameObject from "./gameobject.js";
-import { game } from "./game.js";
-import { evolveAnts } from "./evolution.js";
-import Sugar from "./objects/sugar.js";
-import Resources from "./resources.js";
+import GameObject from "./gameobject";
+import { game } from "./game";
+import { evolveAnts } from "./evolution";
+import Sugar from "./objects/sugar";
+import Resources from "./resources";
 
 // Class for ants
 export default class Ant extends GameObject {
-  constructor(x, y, probeLength) {
+  rad: number;
+  default_speed: number;
+  speed: number;
+  cargo: string | null;
+  idle: boolean;
+  probeLength: number;
+  collision_timeout: number;
+  scentStrength: number;
+  stats: {
+    score: number;
+    days_wo_nest: number;
+    hunger?: number;
+  };
+
+  constructor(x?: number, y?: number, probeLength?: number) {
     super();
     this.x = x || window.innerWidth * Math.random(); // x position
     this.y = y || window.innerHeight * Math.random(); // y position
@@ -18,7 +32,7 @@ export default class Ant extends GameObject {
     this.cargo = null; // carried load
     this.idle = true; // is the ant idle?
     this.probeLength = probeLength || 24; // length of the probes
-    this.image = Resources.get('ant');
+    this.image = Resources.get("ant");
     this.width = 15;
     this.height = 15;
     this.collision_timeout = 0;
@@ -27,7 +41,7 @@ export default class Ant extends GameObject {
   }
 
   // make a step forward
-  step() {
+  step(): void {
     this.x += this.speed * Math.cos(this.direction);
     this.y += this.speed * Math.sin(this.direction);
     // make sure the ant does not leave the window boundaries
@@ -66,7 +80,7 @@ export default class Ant extends GameObject {
   }
 
   // pick up scents and make movement decisions based on the scents around it
-  nose() {
+  nose(): void {
     const range = this.probeLength;
     // compute direction basis components (floats) to avoid temporary objects
     const cosD = Math.cos(this.direction);
@@ -89,14 +103,14 @@ export default class Ant extends GameObject {
   }
 
   // emit ant scent
-  emitAntScent() {
+  emitAntScent(): void {
     game.scents.ant.push(this.x, this.y, this.scentStrength);
     if (this.cargo == "sugar") game.scents.sugar.push(this.x, this.y, 3);
     if (this.idle == true) game.scents.nest.push(this.x, this.y, 1);
   }
 
   // search for objects in the current location and possibly interact
-  detectObjects() {
+  detectObjects(): void {
     // objects at the current location
     for (const obj of game.objMap.get(this.x, this.y)) obj.detect(this);
     // objects at the probes
@@ -117,8 +131,8 @@ export default class Ant extends GameObject {
   }
 
   // carry some sugar
-  take_sugar(sugar) {
-    this.image = Resources.get('antWithSugar');
+  take_sugar(sugar: Sugar): void {
+    this.image = Resources.get("antWithSugar");
     this.direction += Math.PI;
     this.idle = false;
     this.cargo = "sugar";
@@ -132,9 +146,9 @@ export default class Ant extends GameObject {
   }
 
   // deploy sugar at nest
-  deploy_sugar() {
+  deploy_sugar(): void {
     if (this.cargo != "sugar") return;
-    this.image = Resources.get('ant');
+    this.image = Resources.get("ant");
     this.idle = true;
     this.direction += Math.PI;
     this.cargo = null;
@@ -144,12 +158,13 @@ export default class Ant extends GameObject {
   }
 
   // reset the ant and put it in the nest, equvalent to killing it and generating a new ant
-  respawn() {
+  respawn(): void {
     console.log("respawn");
     const nest = game.get_nest();
+    if (!nest) return; // Add check
     this.cargo = null;
     this.idle = true;
-    this.image = Resources.get('ant');
+    this.image = Resources.get("ant");
     this.x = nest.x;
     this.y = nest.y;
     this.stats.score = 0;

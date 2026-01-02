@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import ObjectMap from "../js/objectmap.js";
+import ObjectMap from "../src/objectmap.ts";
 
 describe("ObjectMap", () => {
   it("should initialize with correct resolution", () => {
